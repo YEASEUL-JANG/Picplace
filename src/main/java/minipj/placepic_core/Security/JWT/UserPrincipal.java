@@ -1,12 +1,19 @@
 package minipj.placepic_core.Security.JWT;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import minipj.placepic_core.Entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
-
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserPrincipal implements UserDetails {
     private Long id;
     private String username;
