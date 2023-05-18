@@ -17,9 +17,13 @@ public class User {
     @Column(name="user_id")
     private Long id;
 
-    @Column(name="user_name")
+    @Column(name="login_id",nullable = false)
+    private String loginId;
+
+    @Column(name="user_name",nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @Embedded

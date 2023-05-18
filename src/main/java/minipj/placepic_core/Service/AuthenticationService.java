@@ -2,30 +2,50 @@ package minipj.placepic_core.Service;
 
 import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.Entity.User;
+import minipj.placepic_core.Repository.UserRepository;
 import minipj.placepic_core.Security.JWT.JwtProvider;
 import minipj.placepic_core.Security.JWT.UserPrincipal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
+    private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
-
-    public User signInAndReturnJWT(User signInRequest){
-        //로그인 아이디와 비밀번호를 토대로 authenticationManager의 인증객체를 생성
+    public User signInAndReturnJWT(User loginuser) throws RuntimeException{
+        logger.info("[getSignInResult] 로그인 아이디로 회원정보 요청");
+        Optional<User> user = userRepository.findByUsername(loginuser.getUsername());
+        logger.info("[getSignInResult] 패스워드 비교");
+        if(!passwordEncoder.matches(loginuser.getPassword(),user.get().getPassword())){
+            logger.info("[getSignInResult] 패스워드 불일치");
+            throw new RuntimeException();
+        }
+        logger.info("[getSignInResult] 패스워드 일치");
+        logger.info("[getSignInResult] 인증정보 생성");
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInRequest.getUsername(),signInRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(loginuser.getUsername(),loginuser.getPassword())
         );
-        //로그인시에만 사용되는 userdetails 객체로 변환
+        logger.info("[getSignInResult] 로그인 인증객체 생성");
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        //userdetails 객체를 통해 jwt 토큰 발급
+        logger.info("[getSignInResult] jwt 토큰 생성");
         String jwt = jwtProvider.generateToken(userPrincipal);
-        //로그인 유저 객체에 토큰과 함께 정보 저장하여 반환.
+        logger.info("[getSignInResult] user객체에 토큰 저장하여 반환");
         User signInUser = userPrincipal.getUser();
         signInUser.setToken(jwt);
         return signInUser;

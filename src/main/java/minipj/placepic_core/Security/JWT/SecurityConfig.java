@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,8 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").hasRole(Role.ADMIN.name())//나머지는 admin만 접근가능
                .anyRequest().authenticated();//나머지는 인증이 있어야만 접속가능.
         //UsernamePasswordAuthenticationfilter가 작동하기 전에 jwt필터를 적용시킨다.
-        http.addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+    }
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter(){
+        return new JwtAuthorizationFilter();
     }
     @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -67,5 +72,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .allowedMethods("*");//허용할 http 메소드 (post, get)
             }
         };
+    }
+    @Override
+    public void configure(WebSecurity webSecurity){
+        webSecurity.ignoring()
+                .antMatchers("/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/swagger/**",
+                        "/swagger-ui/**",
+                        "/v2/api-docs/**",
+                        "/webjars/**");
     }
 }
