@@ -17,9 +17,7 @@ public class User {
     @Column(name="user_id")
     private Long id;
 
-    @Column(name="login_id",nullable = false)
-    private String loginId;
-
+    //username : 로그인 아이디
     @Column(name="user_name",nullable = false)
     private String username;
 
