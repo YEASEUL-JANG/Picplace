@@ -1,5 +1,10 @@
 package minipj.placepic_core.Entity;
 
 public enum PlaceType {
-    CAFE,RESTAURANT
+    CAFE,
+    KOREAN,
+    JAPANESE,
+    WESTERN,
+    CHINESE,
+    ETC
 }

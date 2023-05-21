@@ -15,22 +15,26 @@ public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="place_id")
-    private Long id;
+    private Long id; //id
 
     @Column(name="place_name")
-    private String name;
+    private String name; //가게명
+
+    private String time; //영업시간
 
     @Embedded
-    private Address address;
+    private Address address; //주소
 
     @Enumerated(EnumType.STRING)
-    private PlaceType placeType;
+    private PlaceType placeType; //가게타입
 
-    //값타입을 컬렉션으로 사용하기보다 엔티티로 만들어서 일대다 관계로 설정
-    @OneToMany(mappedBy = "id")
-    private List<MenuEntity> menuList=new ArrayList<>();
+    @OneToMany(mappedBy = "place") //메뉴리스트
+    private List<Menu> menuList = new ArrayList<>();
 
     @OneToMany(mappedBy = "place")
-    private List<PicPlace> picUserList = new ArrayList<>();
+    private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체
+
+    @OneToMany(mappedBy = "place")
+    private List<PlacePhoto> placePhotos= new ArrayList<>();
 
 }

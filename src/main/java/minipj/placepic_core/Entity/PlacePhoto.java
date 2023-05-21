@@ -1,18 +1,23 @@
 package minipj.placepic_core.Entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
-public class MenuEntity {
+@Getter
+@Setter
+public class PlacePhoto {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="menulist_id")
+    @Column(name="place_photo_id")
     private Long id;
-    @Embedded
-    private Menu menu;
+
+    @Column(name="place_image")
+    private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="place_id")
+    @JoinColumn(name = "place_id")
     private Place place;
-
 }
