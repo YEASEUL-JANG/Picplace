@@ -9,37 +9,37 @@ import PlacePic from "@/views/PlacePic.vue";
 
 const routes= [
     {
-        name: "home",
+        name: "Home",
         path: "/",
         component: Home,
     },
     {
-        name: "restaurant",
+        name: "Restaurant",
         path: "/restaurant",
         component: Restaurant,
     },
     {
-        name: "profile",
+        name: "Profile",
         path: "/profile",
         component: Profile,
     },
     {
-        name: "placepic",
+        name: "Placepic",
         path: "/placepic",
         component: PlacePic,
     },
     {
-        name: "cafe",
+        name: "Cafe",
         path: "/cafe",
         component: Cafe,
     },
     {
-        name: "login",
+        name: "Login",
         path: "/login",
         component: Login,
     },
     {
-        name: "register",
+        name: "Register",
         path: "/register",
         component: Register,
     },
