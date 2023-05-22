@@ -2,12 +2,14 @@ package minipj.placepic_core.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Setter
 @Getter
+@ToString
 public class Menu {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="menu_id")

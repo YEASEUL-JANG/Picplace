@@ -2,12 +2,14 @@ package minipj.placepic_core.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class PlacePhoto {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

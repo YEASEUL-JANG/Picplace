@@ -40,8 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // csrf 설정이 불필요함.  )
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-                .antMatchers("/api/authentication/**").permitAll()//로그인과 회원가입 모두접근가능
-                .antMatchers("/api/**").hasRole(Role.ADMIN.name())//나머지는 admin만 접근가능
+                .antMatchers("/api/**").permitAll()//API 모두접근가능
                .anyRequest().authenticated();//나머지는 인증이 있어야만 접속가능.
         //UsernamePasswordAuthenticationfilter가 작동하기 전에 jwt필터를 적용시킨다.
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

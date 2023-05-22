@@ -27,7 +27,7 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("PlacePic API TEST with Swagger")
-                .description("설명 부분")
+                .description("PlacePic API-Test Swagger")
                 .version("1.0.0")
                 .build();
     }

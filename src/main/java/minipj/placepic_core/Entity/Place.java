@@ -2,6 +2,7 @@ package minipj.placepic_core.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Place {
 
     @Id
@@ -20,8 +22,10 @@ public class Place {
     @Column(name="place_name")
     private String name; //가게명
 
-    private String time; //영업시간
-
+    private String startTime; //영업시작시간
+    private String endTime; //영업종료시간
+    @Lob
+    private String content;
     @Embedded
     private Address address; //주소
 

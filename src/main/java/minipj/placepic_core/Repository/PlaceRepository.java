@@ -1,15 +1,15 @@
 package minipj.placepic_core.Repository;
 
+import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.Entity.Place;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Repository
+@RequiredArgsConstructor
 public class PlaceRepository {
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     public Long save(Place place){
         em.persist(place);
