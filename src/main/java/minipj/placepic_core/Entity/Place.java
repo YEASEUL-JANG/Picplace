@@ -3,6 +3,8 @@ package minipj.placepic_core.Entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import minipj.placepic_core.Controller.MenuForm;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,13 +34,58 @@ public class Place {
     @Enumerated(EnumType.STRING)
     private PlaceType placeType; //가게타입
 
-    @OneToMany(mappedBy = "place") //메뉴리스트
+    //CascadeType.ALL : place를 persist 하면 menuList도 모두 persist되게한다.
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL) //메뉴리스트
     private List<Menu> menuList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "place")
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체
 
-    @OneToMany(mappedBy = "place")
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlacePhoto> placePhotos= new ArrayList<>();
+
+    //연관관계 편의 메서드
+    public void addMenu(MenuForm form) {
+        Menu menu = new Menu();
+        menu.setName(form.getName());
+        menu.setPrice(form.getPrice());
+        menu.setImage(form.getImage());
+        menu.setPlace(this);
+        menuList.add(menu);
+    }
+    public void addPhoto(String photo){
+        PlacePhoto placePhoto = new PlacePhoto();
+        placePhoto.setImage(photo);
+        placePhoto.setPlace(this);
+        placePhotos.add(placePhoto);
+    }
+
+    //생성메서드
+    public static Place createPlace(
+            String name,
+            String startTime,
+            String endTime,
+            String content,
+            Address address,
+            PlaceType placeType,
+            List<String> placePhotos,
+            List<MenuForm> menuList){
+        Place place = new Place();
+        for(String photo : placePhotos){
+            place.addPhoto(photo);
+        }
+        for(MenuForm m : menuList){
+            place.addMenu(m);
+        }
+        place.setName(name);
+        place.setStartTime(startTime);
+        place.setEndTime(endTime);
+        place.setContent(content);
+        place.setAddress(address);
+        place.setPlaceType(placeType);
+        return place;
+    }
+
+
 
 }

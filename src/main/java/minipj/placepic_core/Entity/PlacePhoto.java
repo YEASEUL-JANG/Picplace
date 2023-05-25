@@ -22,4 +22,7 @@ public class PlacePhoto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
     private Place place;
+
+
+
 }

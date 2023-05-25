@@ -23,7 +23,11 @@ public class UserService {
         logger.info("[saveUser] 비밀번호 암호화 진행");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         logger.info("[saveUser] role 저장");
-        user.setRole(Role.USER);
+        if(user.getUsername().equals("admin")){
+            user.setRole(Role.ADMIN);
+        }else {
+            user.setRole(Role.USER);
+        }
         logger.info("[saveUser] joinDate 설정");
         user.setJoinDate(LocalDateTime.now());
         logger.info("[saveUser] joinUser 저장진행");
