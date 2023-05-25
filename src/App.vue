@@ -13,7 +13,7 @@
                         </li>
                         <li class="nav-item">
                             <router-link to="/cafe" class="nav-link">Cafe</router-link></li>
-                        <li class="nav-item dropdown"  v-if="currentUser">
+                        <li class="nav-item dropdown"  v-if="currentUser && !isAdmin">
                             <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{
                                     currentUser.username
                                 }}</a>
@@ -28,6 +28,15 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
                                 <li><router-link to="/register" class="nav-link">Register</router-link></li>
                                 <li><router-link to="/login" class="nav-link">Login</router-link></li>
+                            </ul>
+                        </li>
+<!--                        admin 메뉴-->
+                        <li class="nav-item dropdown" v-if="isAdmin">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                <li><router-link to="/admin/placeList" class="nav-link">Place 목록</router-link></li>
+                                <li><router-link to="/admin/placeRegister" class="nav-link">Place 등록</router-link></li>
+                                <li><router-link to="#" class="nav-link" @click="logOut">Logout</router-link></li>
                             </ul>
                         </li>
                     </ul>
@@ -62,6 +71,9 @@ export default {
       const store = useStore();
       const router = useRouter();
       const currentUser = computed(() => store.getters["getcurrentUser"]);
+      const isAdmin = computed(() => {
+          return currentUser.value?.role === "ADMIN";
+      });
       const logOut = () => {
           store.dispatch("clearUser");
           triggerToast("로그아웃 되었습니다.");
@@ -69,7 +81,8 @@ export default {
       }
       return{
           currentUser,
-          logOut
+          logOut,
+          isAdmin
       }
   }
 }

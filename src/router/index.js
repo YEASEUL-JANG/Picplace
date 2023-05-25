@@ -6,6 +6,8 @@ import Restaurant from "@/views/Restaurant.vue";
 import Cafe from "@/views/Cafe.vue";
 import Profile from "@/views/Profile.vue";
 import PlacePic from "@/views/PlacePic.vue";
+import PlaceRegister from "@/views/admin/placeRegister.vue";
+import PlaceList from "@/views/admin/placeList.vue";
 
 const routes= [
     {
@@ -41,6 +43,21 @@ const routes= [
     {
         name: "Register",
         path: "/register",
+        component: Register,
+    },
+    {
+        name: "PlaceRegister",
+        path: "/admin/placeRegister",
+        component: PlaceRegister,
+    },
+    {
+        name: "PlaceList",
+        path: "/admin/placeList",
+        component: PlaceList,
+    },
+    {
+        name: "PlaceEdit",
+        path: "/admin/placeEdit/:placeId",
         component: Register,
     },
 
