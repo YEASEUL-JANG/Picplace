@@ -3,9 +3,11 @@ package minipj.placepic_core.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minipj.placepic_core.Controller.PlaceForm;
+import minipj.placepic_core.Controller.PlaceResult;
 import minipj.placepic_core.Entity.Address;
 import minipj.placepic_core.Entity.Place;
 import minipj.placepic_core.Repository.PlaceRepository;
+import minipj.placepic_core.Repository.PlaceSearch;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +39,8 @@ public class PlaceService {
         return placeId;
     }
 
-    public List<Place> findAllPlace() {
+    public List<PlaceResult> findPlaces(PlaceSearch placeSearch) {
     log.info("[findAllPlace] Place 목록 출력");
-    placeRepository.
-
+        return placeRepository.findPlaces(placeSearch);
     }
 }

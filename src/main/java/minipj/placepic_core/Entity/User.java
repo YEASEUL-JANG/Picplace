@@ -17,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private Long id;
+    private Long userId;
 
     //username : 로그인 아이디
     @Column(name="user_name",nullable = false)

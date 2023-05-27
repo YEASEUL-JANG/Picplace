@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 @ToString
 public class MenuForm {
 
-    private String name;
+    private String muneName;
     private int price;
-    private String image;
+    private String menuImage;
 }

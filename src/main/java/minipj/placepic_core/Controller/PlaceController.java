@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.Entity.*;
 import minipj.placepic_core.Repository.PlaceRepository;
+import minipj.placepic_core.Repository.PlaceSearch;
 import minipj.placepic_core.Service.AuthenticationService;
 import minipj.placepic_core.Service.PlaceService;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "장소등록 테스트")
 @RestController
@@ -34,11 +36,14 @@ public class PlaceController {
         return new ResponseEntity<>(placeId, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value="장소목록",notes = "@RequestBody를 활용한 장소등록 Post Method")
-    @GetMapping("/placelist")
-    public ResponseEntity<?> placeList(){
+    @ApiOperation(value="장소목록",notes = "@RequestBody를 활용한 장소등록 Get Method")
+    @PostMapping("/placelist")
+    public ResponseEntity<?> placeList(@RequestBody PlaceSearch placeSearch){
         logger.info("[placelist] 장소목록 조회");
-        return new ResponseEntity<>(placeService.findAllPlace(), HttpStatus.OK);
+        logger.info("[placelist] 검색 요청 정보 : {}", placeSearch.toString());
+        return new ResponseEntity<>(placeService.findPlaces(placeSearch),HttpStatus.OK);
     }
+
+
 
 }

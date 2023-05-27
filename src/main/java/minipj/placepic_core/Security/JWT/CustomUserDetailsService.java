@@ -28,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         //UserDetails 객체로 반환한다.
         return UserPrincipal.builder()
                 .user(user)
-                .id(user.getId())
+                .id(user.getUserId())
                 .username(username)
                 .password(user.getPassword())
                 .authorities(authorities)

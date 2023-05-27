@@ -13,10 +13,10 @@ import javax.persistence.*;
 public class Menu {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="menu_id")
-    private Long id;
+    private Long menuId;
 
     @Column(name="menu_name")
-    private String name;
+    private String menuName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="place_id")
@@ -25,5 +25,5 @@ public class Menu {
     private int price;
 
     @Column(name="menu_image")
-    private String image;
+    private String menuImage;
 }

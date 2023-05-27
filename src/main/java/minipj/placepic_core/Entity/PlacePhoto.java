@@ -14,10 +14,10 @@ public class PlacePhoto {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="place_photo_id")
-    private Long id;
+    private Long placePhotoId;
 
     @Column(name="place_image")
-    private String image;
+    private String placeImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")

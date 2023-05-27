@@ -19,10 +19,10 @@ public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="place_id")
-    private Long id; //id
+    private Long placeId; //id
 
     @Column(name="place_name")
-    private String name; //가게명
+    private String placeName; //가게명
 
     private String startTime; //영업시작시간
     private String endTime; //영업종료시간
@@ -47,22 +47,22 @@ public class Place {
     //연관관계 편의 메서드
     public void addMenu(MenuForm form) {
         Menu menu = new Menu();
-        menu.setName(form.getName());
+        menu.setMenuName(form.getMuneName());
         menu.setPrice(form.getPrice());
-        menu.setImage(form.getImage());
+        menu.setMenuImage(form.getMenuImage());
         menu.setPlace(this);
         menuList.add(menu);
     }
     public void addPhoto(String photo){
         PlacePhoto placePhoto = new PlacePhoto();
-        placePhoto.setImage(photo);
+        placePhoto.setPlaceImage(photo);
         placePhoto.setPlace(this);
         placePhotos.add(placePhoto);
     }
 
     //생성메서드
     public static Place createPlace(
-            String name,
+            String placeName,
             String startTime,
             String endTime,
             String content,
@@ -77,7 +77,7 @@ public class Place {
         for(MenuForm m : menuList){
             place.addMenu(m);
         }
-        place.setName(name);
+        place.setPlaceName(placeName);
         place.setStartTime(startTime);
         place.setEndTime(endTime);
         place.setContent(content);

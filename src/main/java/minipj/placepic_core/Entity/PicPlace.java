@@ -16,7 +16,7 @@ public class PicPlace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="picplace_id")
-    private Long id;
+    private Long picplaceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
