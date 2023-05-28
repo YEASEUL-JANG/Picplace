@@ -3,7 +3,6 @@ package minipj.placepic_core.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minipj.placepic_core.Controller.PlaceForm;
-import minipj.placepic_core.Controller.PlaceResult;
 import minipj.placepic_core.Entity.Address;
 import minipj.placepic_core.Entity.Place;
 import minipj.placepic_core.Repository.PlaceRepository;
@@ -39,8 +38,13 @@ public class PlaceService {
         return placeId;
     }
 
-    public List<PlaceResult> findPlaces(PlaceSearch placeSearch) {
+    public List<PlaceForm> findPlaces(PlaceSearch placeSearch) {
     log.info("[findAllPlace] Place 목록 출력");
         return placeRepository.findPlaces(placeSearch);
+    }
+
+    public PlaceForm findAPlace(Long placeId) {
+        log.info("[findAPlace] Place 상세정보 출력");
+        return placeRepository.findAPlace(placeId);
     }
 }

@@ -1,5 +1,6 @@
 package minipj.placepic_core.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -35,12 +36,13 @@ public class Place {
     private PlaceType placeType; //가게타입
 
     //CascadeType.ALL : place를 persist 하면 menuList도 모두 persist되게한다.
+    @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL) //메뉴리스트
     private List<Menu> menuList = new ArrayList<>();
-
+    @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체
-
+    @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlacePhoto> placePhotos= new ArrayList<>();
 

@@ -11,6 +11,7 @@ import java.util.List;
 
 @Getter@Setter@ToString
 public class PlaceForm {
+    private Long placeId;
 
     private String name; //가게명
     private String startTime; //영업시작시간

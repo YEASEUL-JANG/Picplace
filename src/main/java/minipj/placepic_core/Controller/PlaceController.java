@@ -44,6 +44,13 @@ public class PlaceController {
         return new ResponseEntity<>(placeService.findPlaces(placeSearch),HttpStatus.OK);
     }
 
+    @ApiOperation(value="상세장소",notes = "@RequestBody를 활용한 장소등록 Get Method")
+    @PostMapping("/placedetail")
+    public ResponseEntity<?> placeList(@RequestBody Long placeId){
+        logger.info("[placelist] 장소 상세 조회");
+        return new ResponseEntity<>(placeService.findAPlace(placeId),HttpStatus.OK);
+    }
+
 
 
 }
