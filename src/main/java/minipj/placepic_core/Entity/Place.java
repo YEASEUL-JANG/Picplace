@@ -29,6 +29,7 @@ public class Place {
     private String endTime; //영업종료시간
     @Lob
     private String content;
+
     @Embedded
     private Address address; //주소
 
@@ -39,6 +40,7 @@ public class Place {
     @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL) //메뉴리스트
     private List<Menu> menuList = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체

@@ -1,6 +1,8 @@
 package minipj.placepic_core.Service;
 
 import lombok.RequiredArgsConstructor;
+import minipj.placepic_core.Controller.JoinForm;
+import minipj.placepic_core.Entity.Address;
 import minipj.placepic_core.Entity.Role;
 import minipj.placepic_core.Entity.User;
 import minipj.placepic_core.Repository.UserRepository;
@@ -19,11 +21,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-    public User saveUser(User user){
+    public User saveUser(JoinForm joinuser){
+        logger.info("[saveUser] 유저객체 생성");
+        User user = new User();
+        logger.info("[saveUser] joinform 정보 저장");
+        Address address = new Address(joinuser.getAddress(), joinuser.getDetailAddress(), joinuser.getZipcode());
+        user.setAddress(address);
+        user.setUsername(joinuser.getUsername());
         logger.info("[saveUser] 비밀번호 암호화 진행");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(joinuser.getPassword()));
         logger.info("[saveUser] role 저장");
-        if(user.getUsername().equals("admin")){
+        if(joinuser.getUsername().equals("admin")){
             user.setRole(Role.ADMIN);
         }else {
             user.setRole(Role.USER);
@@ -37,5 +45,10 @@ public class UserService {
     public Optional<User> findByUsername(String username){
         logger.info("[findByUsername] 아이디 검색중");
         return userRepository.findByUsername(username);
+    }
+
+    public void deleteUser(Long userId) {
+        logger.info("[deleteUser] 유저 삭제 진행");
+        userRepository.deleteById(userId);
     }
 }

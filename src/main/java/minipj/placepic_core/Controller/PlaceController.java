@@ -45,12 +45,28 @@ public class PlaceController {
     }
 
     @ApiOperation(value="상세장소",notes = "@RequestBody를 활용한 장소등록 Get Method")
-    @PostMapping("/placedetail")
-    public ResponseEntity<?> placeList(@RequestBody Long placeId){
+    @PostMapping("/placedetail/{placeId}")
+    public ResponseEntity<?> placeList(@PathVariable Long placeId){
         logger.info("[placelist] 장소 상세 조회");
         return new ResponseEntity<>(placeService.findAPlace(placeId),HttpStatus.OK);
     }
 
+    @ApiOperation(value="장소삭제",notes = "@RequestBody를 활용한 장소등록 Get Method")
+    @PostMapping("/placedelete/{placeId}")
+    public ResponseEntity<?> placeDelete(@PathVariable Long placeId){
+        logger.info("[placelist] 장소 삭제 진행");
+        placeService.deletePlace(placeId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value="장소수정",notes = "@PathVariable를 활용한 장소수정 Post Method")
+    @PostMapping("/placeEdit/{placeId}")
+    public ResponseEntity<?> placeEdit(@RequestBody PlaceForm form,
+                                       @PathVariable Long placeId){
+        logger.info("[add_place] 장소수정 진행, placeForm : {}",form.toString());
+        Long editplaceId = placeService.editPlace(form);
+        return new ResponseEntity<>(editplaceId, HttpStatus.OK);
+    }
 
 
 }

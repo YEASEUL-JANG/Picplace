@@ -21,7 +21,7 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
 
-    @Transactional
+    @Transactional //commit을 하면서 영속성
     public Long createPlace(PlaceForm form) {
         log.info("[createPlace] place 등록시작");
         log.info("[createPlace] Address객체 생성 ");
@@ -47,4 +47,18 @@ public class PlaceService {
         log.info("[findAPlace] Place 상세정보 출력");
         return placeRepository.findAPlace(placeId);
     }
+
+    @Transactional
+    public void deletePlace(Long placeId) {
+        log.info("[deletePlace] 삭제 장소Id : {}",placeId);
+        placeRepository.deletePlace(placeId);
+    }
+
+    @Transactional
+    public Long editPlace(PlaceForm form) {
+        log.info("[deletePlace] 수정진행");
+        return placeRepository.editPlace(form);
+    }
+
+
 }

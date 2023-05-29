@@ -27,7 +27,7 @@ public class AuthenticationController {
     //회원가입
     @ApiOperation(value="회원가입",notes = "@RequestBody를 활용한 회원가입 Post Method")
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@ApiParam(value = "User object") @RequestBody User user){
+    public ResponseEntity<?> signUp(@ApiParam(value = "User object") @RequestBody JoinForm user){
         logger.info("[sign-up] 회원가입 진행, joinuser : {}",user.toString());
         logger.info("[sign-up] 아이디 중복확인");
         if(userService.findByUsername(user.getUsername()).isPresent()){
@@ -39,7 +39,7 @@ public class AuthenticationController {
     }
     @ApiOperation(value="로그인요청",notes = "@RequestBody를 활용한 로그인요청 Post Method")
     @PostMapping("/sign-in")
-    public ResponseEntity<?> signIn(@ApiParam(value = "User object") @RequestBody User user){
+    public ResponseEntity<?> signIn(@ApiParam(value = "UserId") @RequestBody User user){
         logger.info("[sign-in] 로그인 진행, loginuser : {}",user.toString());
         try {
             User loginuser = authenticationService.signInAndReturnJWT(user);

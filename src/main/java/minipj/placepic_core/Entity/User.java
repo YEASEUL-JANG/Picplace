@@ -3,6 +3,7 @@ package minipj.placepic_core.Entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import minipj.placepic_core.Controller.JoinForm;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

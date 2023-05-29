@@ -55,31 +55,7 @@ public class PlaceRepository {
             placeForms.add(placeForm);
         }
         return placeForms;
-
-//    return query
-//            .select(Projections.bean(PlaceResult.class,
-//                    place.placeId,
-//                    place.placeName,
-//                    place.startTime,
-//                    place.endTime,
-//                    place.content,
-//                    place.address.address,
-//                    place.address.detailAddress,
-//                    menu.menuName,
-//                    menu.price,
-//                    menu.menuImage,
-//                    placePhoto.placeImage))
-//            .from(place)
-//            .join(place.placePhotos, placePhoto)
-//            .join(place.menuList, menu)
-//            .where(nameLike(placeSearch.getPlaceName()),
-//                    addressLike(placeSearch.getAddress()),
-//                    menuLike(placeSearch.getMenuKeyword()),
-//                    typeLike(placeSearch.getPlaceType()))
-//            .fetch();
     }
-
-   
 
     private Predicate menuLike(String menuKeyword) {
         if(!StringUtils.hasText(menuKeyword)){
@@ -124,7 +100,6 @@ public class PlaceRepository {
         List<String> placePhotos = getPlacePhotos(searchId, query, placePhoto);
         //setting
         settingPlace(searchId, placeForm, place, menus, placePhotos);
-
         return placeForm;
 
     }
@@ -161,5 +136,37 @@ public class PlaceRepository {
                 .where(QPlacePhoto.placePhoto.place.placeId.eq(searchId))
                 .fetch();
         return placePhotos;
+    }
+
+    public void deletePlace(Long id) {
+        em.createQuery("delete from User u where u.userId=:userid")
+                .setParameter("userid",id)
+                .executeUpdate();
+    }
+
+    public Long editPlace(PlaceForm form) {
+        Place findplace = em.find(Place.class, form.getPlaceId());
+        findplace.setPlaceName(form.getName());
+        findplace.setPlaceType(form.getPlaceType());
+        findplace.setContent(form.getContent());
+        Address newAddress = new Address(form.getAddress(),form.getDetailAddress(), form.getZipcode());
+        findplace.setAddress(newAddress);
+        findplace.setStartTime(form.getStartTime());
+        findplace.setEndTime(form.getEndTime());
+        //기존 메뉴 삭제
+        findplace.setMenuList(null);
+        //메뉴 변경 진행
+        List<MenuForm> menuList = form.getMenuList();
+        for(MenuForm m : menuList){
+            findplace.addMenu(m);
+        }
+        //기존 사진 삭제
+        findplace.setPlacePhotos(null);
+        //장소 사진 변경
+        for(String a : form.getPlacePhotos()){
+            findplace.addPhoto(a);
+        }
+
+        return findplace.getPlaceId();
     }
 }
