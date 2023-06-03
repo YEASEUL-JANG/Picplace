@@ -4,10 +4,7 @@
 
 <script>
 export default {
-    name: "placeList"
+    name: "placeList",
 }
 </script>
 
-<style scoped>
-
-</style>

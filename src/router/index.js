@@ -2,12 +2,13 @@ import {createRouter, createWebHistory} from "vue-router";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
-import Restaurant from "@/views/Restaurant.vue";
 import Cafe from "@/views/Cafe.vue";
 import Profile from "@/views/Profile.vue";
 import PlacePic from "@/views/PlacePic.vue";
 import PlaceRegister from "@/views/admin/placeRegister.vue";
 import PlaceList from "@/views/admin/placeList.vue";
+import List from "@/views/PlaceList.vue";
+
 
 const routes= [
     {
@@ -16,9 +17,9 @@ const routes= [
         component: Home,
     },
     {
-        name: "Restaurant",
-        path: "/restaurant",
-        component: Restaurant,
+        name: "List",
+        path: "/list",
+        component: List,
     },
     {
         name: "Profile",

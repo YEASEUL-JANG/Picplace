@@ -29,14 +29,14 @@
                     <!-- address  input-->
                     <div class="form-floating" >
                         <input class="form-control" id="address" type="text"
-                               v-model="joinuser.address.address"
+                               v-model="joinuser.address"
                                data-sb-validations="required" @click="execDaumPostcode"/>
                         <label for="address" >Address</label>
                         <div class="invalid-feedback" data-sb-feedback="address:required">An address is required.</div>
                     </div>
                     <div class="form-floating mb-3">
                         <input class="form-control" id="detailAddress" type="text"
-                               v-model="joinuser.address.detailAddress" data-sb-validations="required" />
+                               v-model="joinuser.detailAddress" data-sb-validations="required" />
                         <label for="detailAddress">Detail Address</label>
                         <div class="invalid-feedback" data-sb-feedback="detailAddress:required">A detail address is required.</div>
                     </div>
@@ -60,11 +60,9 @@ export default {
         const joinuser= ref({
             username: "",
             password: "",
-            address: {
-                address: "",
-                detailAddress: "",
-                zipcode: ""
-            },
+            address: "",
+            detailAddress: "",
+            zipcode: ""
         })
         const execDaumPostcode = () => {
             new window.daum.Postcode({
@@ -75,8 +73,8 @@ export default {
                     } else { // 사용자가 지번 주소를 선택했을 경우(J)
                         addr = data.jibunAddress;
                     }
-                    joinuser.value.address.zipcode = data.zonecode;
-                    joinuser.value.address.address = addr;
+                    joinuser.value.zipcode = data.zonecode;
+                    joinuser.value.address = addr;
                     // 커서를 상세주소 필드로 이동한다.
                     document.getElementById("detailAddress").focus();
                 }
@@ -85,8 +83,8 @@ export default {
         const submitForm = async () => {
             if(!joinuser.value.username ||
                 !joinuser.value.password ||
-                !joinuser.value.address.address ||
-                !joinuser.value.address.detailAddress) {
+                !joinuser.value.address ||
+                !joinuser.value.detailAddress) {
                 triggerToast("빈칸을 모두 입력하세요.","danger");
                 return;
             }

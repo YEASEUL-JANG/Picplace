@@ -9,10 +9,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <router-link to="/restaurant" class="nav-link">Restaurant</router-link>
+                            <router-link to="/list" class="nav-link">Place</router-link>
                         </li>
-                        <li class="nav-item">
-                            <router-link to="/cafe" class="nav-link">Cafe</router-link></li>
                         <li class="nav-item dropdown"  v-if="currentUser && !isAdmin">
                             <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{
                                     currentUser.username
@@ -44,11 +42,9 @@
             </div>
         </nav>
         <!-- Page content-->
-        <section class="py-5">
             <div class="container px-5">
                 <router-view />
             </div>
-        </section>
     </main>
     </body>
     <transition name="slide">
