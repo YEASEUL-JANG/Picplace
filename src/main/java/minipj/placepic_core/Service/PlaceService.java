@@ -29,7 +29,7 @@ public class PlaceService {
         log.info("[createPlace] Place 객체에 정보 저장");
         Place place = Place.createPlace(form.getName(), form.getStartTime(),
                 form.getEndTime(), form.getContent(),
-                address, form.getPlaceType(),
+                address, form.getPlaceType(),form.getMenuType(),
                  form.getPlacePhotos(), form.getMenuList());
         log.info("[createPlace] place 등록 진행");
         Long placeId = placeRepository.save(place);

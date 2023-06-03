@@ -45,7 +45,7 @@ public class PlaceController {
     }
 
     @ApiOperation(value="상세장소",notes = "@RequestBody를 활용한 장소등록 Get Method")
-    @PostMapping("/placedetail/{placeId}")
+    @GetMapping("/placedetail/{placeId}")
     public ResponseEntity<?> placeList(@PathVariable Long placeId){
         logger.info("[placelist] 장소 상세 조회");
         return new ResponseEntity<>(placeService.findAPlace(placeId),HttpStatus.OK);

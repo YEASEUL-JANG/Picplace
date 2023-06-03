@@ -44,7 +44,8 @@ public class PlaceRepository {
                 .where(nameLike(placeSearch.getPlaceName()),
                         addressLike(placeSearch.getAddress()),
                         menuLike(placeSearch.getMenuKeyword()),
-                        typeLike(placeSearch.getPlaceType()))
+                        placeTypeLike(placeSearch.getPlaceType()),
+                        menuTypeLike(placeSearch.getMenuType()))
                 .fetch();
         for(Place p : places){
             PlaceForm placeForm = new PlaceForm();
@@ -64,11 +65,18 @@ public class PlaceRepository {
         return place.menuList.any().menuName.contains(menuKeyword);
     }
 
-    private Predicate typeLike(String placeType) {
+    private Predicate placeTypeLike(String placeType) {
         if(!StringUtils.hasText(placeType)){
             return null;
         }
         return place.placeType.eq(PlaceType.valueOf(placeType));
+    }
+
+    private Predicate menuTypeLike(String menuType) {
+        if(!StringUtils.hasText(menuType)){
+            return null;
+        }
+        return place.menuType.eq(MenuType.valueOf(menuType));
     }
 
     private Predicate addressLike(String address) {
@@ -111,6 +119,7 @@ public class PlaceRepository {
         placeForm.setEndTime(place.getEndTime());
         placeForm.setContent(place.getContent());
         placeForm.setPlaceType(place.getPlaceType());
+        placeForm.setMenuType(place.getMenuType());
         placeForm.setAddress(place.getAddress().getAddress());
         placeForm.setDetailAddress(place.getAddress().getDetailAddress());
         placeForm.setZipcode(place.getAddress().getZipcode());
@@ -148,6 +157,7 @@ public class PlaceRepository {
         Place findplace = em.find(Place.class, form.getPlaceId());
         findplace.setPlaceName(form.getName());
         findplace.setPlaceType(form.getPlaceType());
+        findplace.setMenuType(form.getMenuType());
         findplace.setContent(form.getContent());
         Address newAddress = new Address(form.getAddress(),form.getDetailAddress(), form.getZipcode());
         findplace.setAddress(newAddress);

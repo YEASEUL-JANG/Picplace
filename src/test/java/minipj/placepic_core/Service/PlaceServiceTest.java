@@ -35,7 +35,7 @@ class PlaceServiceTest {
     void 장소등록() {
         PlaceForm form = new PlaceForm();
         form.setName("국밥집");
-        form.setPlaceType(PlaceType.KOREAN);
+        form.setPlaceType(PlaceType.RESTAURANT);
         form.setAddress("서울 강서구 공항대로");
         form.setPlacePhotos(Arrays.asList("포토1","포토2"));
         List<MenuForm> menuFormList = new ArrayList<>();

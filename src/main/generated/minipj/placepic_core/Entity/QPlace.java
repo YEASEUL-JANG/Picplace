@@ -30,6 +30,8 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final ListPath<Menu, QMenu> menuList = this.<Menu, QMenu>createList("menuList", Menu.class, QMenu.class, PathInits.DIRECT2);
 
+    public final EnumPath<MenuType> menuType = createEnum("menuType", MenuType.class);
+
     public final ListPath<PicPlace, QPicPlace> picPlaces = this.<PicPlace, QPicPlace>createList("picPlaces", PicPlace.class, QPicPlace.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> placeId = createNumber("placeId", Long.class);

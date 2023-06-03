@@ -36,6 +36,9 @@ public class Place {
     @Enumerated(EnumType.STRING)
     private PlaceType placeType; //가게타입
 
+    @Enumerated(EnumType.STRING)
+    private MenuType menuType; //가게타입
+
     //CascadeType.ALL : place를 persist 하면 menuList도 모두 persist되게한다.
     @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL) //메뉴리스트
@@ -72,6 +75,7 @@ public class Place {
             String content,
             Address address,
             PlaceType placeType,
+            MenuType menuType,
             List<String> placePhotos,
             List<MenuForm> menuList){
         Place place = new Place();
@@ -87,6 +91,7 @@ public class Place {
         place.setContent(content);
         place.setAddress(address);
         place.setPlaceType(placeType);
+        place.setMenuType(menuType);
         return place;
     }
 

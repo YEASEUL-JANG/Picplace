@@ -18,6 +18,7 @@ public class PlaceForm {
     private String endTime; //영업종료시간
     private String content; //내용
     private PlaceType placeType; //가게타입
+    private MenuType menuType; //메뉴타입
 
     //주소
     private String address;
