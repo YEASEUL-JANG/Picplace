@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,27 @@ public class PlaceController {
 
         return new ResponseEntity<>(placeId, HttpStatus.CREATED);
     }
+//    사진 업로드
+@ApiOperation(value="이미지업로드",notes = "@RequestParam 활용한 이미지 업로드 Post Method")
+@PostMapping("/uploadImage")
+public ResponseEntity<?> uploadImage(@RequestParam("menuImages") List<MultipartFile> menuImages,
+                                     @RequestParam("placeImages")List<MultipartFile> placeImages) throws IOException {
+     for(MultipartFile menuImage : menuImages) {
+         logger.info("[uploadImage] 메뉴 이미지업로드 진행, menuImage : {}",menuImage.getOriginalFilename());
+         placeService.uploadMenuImage(menuImage);
+     }
+    logger.info("[uploadImage] 메뉴 이미지업로드 완료");
+    for(MultipartFile placeImage : placeImages) {
+        logger.info("[uploadImage] 매장 이미지업로드 진행, placeImage : {}",placeImage.getOriginalFilename());
+        placeService.uploadPlaceImage(placeImage);
+    }
+    logger.info("[uploadImage] 매장 이미지업로드 완료");
+
+
+
+    return new ResponseEntity<>(menuImages.size()+placeImages.size(), HttpStatus.OK);
+}
+
 
     @ApiOperation(value="장소목록",notes = "@RequestBody를 활용한 장소등록 Get Method")
     @PostMapping("/placelist")

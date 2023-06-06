@@ -14,15 +14,15 @@ import javax.persistence.ManyToOne;
 @ToString
 public class MenuForm {
 
-    private String muneName;
+    private String menuName;
     private int price;
     private String menuImage;
 
     public MenuForm() {
     }
 
-    public MenuForm(String muneName, int price, String menuImage) {
-        this.muneName = muneName;
+    public MenuForm(String menuName, int price, String menuImage) {
+        this.menuName = menuName;
         this.price = price;
         this.menuImage = menuImage;
     }

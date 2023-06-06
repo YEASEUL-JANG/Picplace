@@ -54,7 +54,7 @@ public class Place {
     //연관관계 편의 메서드
     public void addMenu(MenuForm form) {
         Menu menu = new Menu();
-        menu.setMenuName(form.getMuneName());
+        menu.setMenuName(form.getMenuName());
         menu.setPrice(form.getPrice());
         menu.setMenuImage(form.getMenuImage());
         menu.setPlace(this);

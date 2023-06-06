@@ -7,9 +7,13 @@ import minipj.placepic_core.Entity.Address;
 import minipj.placepic_core.Entity.Place;
 import minipj.placepic_core.Repository.PlaceRepository;
 import minipj.placepic_core.Repository.PlaceSearch;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,6 +24,8 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
 
+    @Value("${file.dir}")
+    private String fileDir;
 
     @Transactional //commit을 하면서 영속성
     public Long createPlace(PlaceForm form) {
@@ -59,6 +65,25 @@ public class PlaceService {
         log.info("[deletePlace] 수정진행");
         return placeRepository.editPlace(form);
     }
+    @Transactional
+    public void uploadMenuImage(MultipartFile menuImage) throws IOException {
 
+        //본래 파일이름
+        String origName = menuImage.getOriginalFilename();
+        //원래는 uuid로 파일이름을 변경하지만..파일객체를 따로 저장하지 않을것이므로
+        //고유 파일명으로 저장한다.
+        //String uuid = UUID.randomUUID().toString();
+        //불러올 파일 경로
+        String savedPath = fileDir + origName;
+        //로컬에 저장
+        menuImage.transferTo(new File(savedPath));
 
+    }
+
+    @Transactional
+    public void uploadPlaceImage(MultipartFile placeImage) throws IOException {
+        String origName = placeImage.getOriginalFilename();
+        String savedPath = fileDir + origName;
+        placeImage.transferTo(new File(savedPath));
+    }
 }
