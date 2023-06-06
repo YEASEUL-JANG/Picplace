@@ -60,19 +60,23 @@
         <div class="container  my-5">
             <el-row  gutter=16>
                 <el-col
-                        v-for="o in 12"
-                        :key="o"
+                        v-for="(place,index) in places"
+                        :key="index"
                         :span="8"
                         class="el-col"
                 >
                     <el-card :body-style="{ padding: '0px' }">
-                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                        <img :src="'./upload/'+place.placePhotos[0]"
                              class="image"
                         />
                         <div style="padding: 14px">
-                            <span>Yummy hamburger</span>
+                            <span>{{ place.name }}</span>
+                            <div>
+                                {{place.placePhotos[0]}}
+
+                            </div>
                             <div class="bottom">
-                                <time class="time">Fri Jun 02 2023 17:48:30 GMT+0900</time>
+                                <time class="time">{{ place.content }}</time>
                                 <el-button text class="button">Operating</el-button>
                             </div>
                         </div>
@@ -86,12 +90,15 @@
 <script>
 import {  ref, watchEffect} from "vue";
 import {Search} from "@element-plus/icons-vue";
-import MenuType  from "@/model/menuType";
 import {useToast} from "@/common/toast";
 import axios from "@/common/axios";
+import menuTypes from "../model/menuType";
 export default {
     name: "PlaceList",
     computed: {
+        menuTypes() {
+            return menuTypes
+        },
         Search() {
             return Search
         }
@@ -103,13 +110,6 @@ export default {
         const keyword = ref("")
         const category = ref("")
         const placeType = ref([]);
-        const menuTypes = ref({
-            KOREAN : MenuType.KOREAN,
-            WESTERN : MenuType.WESTERN,
-            CHINESE : MenuType.CHINESE,
-            JAPANESE : MenuType.JAPANESE,
-            ETC : MenuType.ETC
-    });
         const placeSearch = ref({
             placeName: '',
             menuKeyword: '',
@@ -117,6 +117,7 @@ export default {
             placeType: '',
             menuType:''
         })
+        const places = ref({});
 
         watchEffect(()=> {
             if (placeType.value.toString() ==='CAFE') {
@@ -129,6 +130,7 @@ export default {
         })
         const placeList = async () => {
             const res = await axios.post('api/place/placelist',placeSearch.value);
+            places.value = res.data
             console.log(res);
         }
         const searchPlace = async () => {
@@ -164,7 +166,7 @@ export default {
             category,
             searchPlace,
             placeType,
-            menuTypes
+            places
 
 
         }
