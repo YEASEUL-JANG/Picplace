@@ -5,16 +5,21 @@ import lombok.extern.slf4j.Slf4j;
 import minipj.placepic_core.Controller.PlaceForm;
 import minipj.placepic_core.Entity.Address;
 import minipj.placepic_core.Entity.Place;
+import minipj.placepic_core.Entity.User;
 import minipj.placepic_core.Repository.PlaceRepository;
 import minipj.placepic_core.Repository.PlaceSearch;
+import minipj.placepic_core.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,6 +28,7 @@ import java.util.List;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final UserRepository userRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -85,5 +91,16 @@ public class PlaceService {
         String origName = placeImage.getOriginalFilename();
         String savedPath = fileDir + origName;
         placeImage.transferTo(new File(savedPath));
+    }
+
+    @Transactional
+    public Long placePic(Long placeId, Long userId) {
+        log.info("[placePic] 찜장소 중복확인");
+        if(placeRepository.checkduplPic(placeId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"이미 찜한 장소입니다.");
+        }
+        log.info("[placePic] 찜장소 등록 시작");
+        Optional<User> picuser = userRepository.findById(userId);
+        return placeRepository.placePic(placeId,picuser.get());
     }
 }

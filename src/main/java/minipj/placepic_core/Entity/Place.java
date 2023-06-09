@@ -8,6 +8,7 @@ import minipj.placepic_core.Controller.MenuForm;
 import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class Place {
     @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체
+
     @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlacePhoto> placePhotos= new ArrayList<>();
@@ -65,6 +67,14 @@ public class Place {
         placePhoto.setPlaceImage(photo);
         placePhoto.setPlace(this);
         placePhotos.add(placePhoto);
+    }
+
+    public void addPicplace(User picuser) {
+        PicPlace picPlace = new PicPlace();
+        picPlace.setPicDate(LocalDateTime.now());
+        picPlace.setPlace(this);
+        picPlace.setUser(picuser);
+        picPlaces.add(picPlace);
     }
 
     //생성메서드

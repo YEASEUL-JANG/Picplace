@@ -91,5 +91,14 @@ public ResponseEntity<?> uploadImage(@RequestParam("menuImages") List<MultipartF
         return new ResponseEntity<>(editplaceId, HttpStatus.OK);
     }
 
+    @ApiOperation(value="찜하기",notes = "@PathVariable를 활용한 장소찜하기")
+    @PostMapping("/placePic/{placeId}")
+    public ResponseEntity<?> placePic( @PathVariable Long placeId, @RequestBody Map<String, Long> requestBody){
+        Long userId = requestBody.get("userId");
+        logger.info("[place_pic] 장소찜하기 , placeId : {}, userId : {}", placeId, userId);
+        Long placepicId = placeService.placePic(placeId, userId);
+        return new ResponseEntity<>(placepicId, HttpStatus.OK);
+    }
+
 
 }

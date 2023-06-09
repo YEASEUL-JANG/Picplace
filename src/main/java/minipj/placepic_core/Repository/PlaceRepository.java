@@ -1,21 +1,19 @@
 package minipj.placepic_core.Repository;
 
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.Controller.MenuForm;
 import minipj.placepic_core.Controller.PlaceForm;
 import minipj.placepic_core.Entity.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static minipj.placepic_core.Entity.QPlace.place;
 
@@ -29,6 +27,8 @@ public class PlaceRepository {
         em.persist(place);
         return place.getPlaceId();
     }
+
+
 
     public List<PlaceForm> findPlaces(PlaceSearch placeSearch){
         JPAQueryFactory query = new JPAQueryFactory(em);
@@ -178,5 +178,20 @@ public class PlaceRepository {
         }
 
         return findplace.getPlaceId();
+    }
+
+    public Long placePic(Long placeId, User picuser) {
+        Place place = em.find(Place.class, placeId);
+        place.addPicplace(picuser);
+        return place.getPlaceId();
+    }
+
+    public boolean checkduplPic(Long placeId) {
+        Place place = em.find(Place.class,placeId);
+        if(place.getPicPlaces().size()>0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
