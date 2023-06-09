@@ -6,7 +6,7 @@
                 <div class="searchBox">
                     <div class="text-center my-5">
                         <h1 class="display-5 fw-bolder text-black mb-2">Present your business in a whole new way</h1>
-
+                        <!-- 검색창 -->
                         <el-form
                                 class="bg-black searchForm"
                                 ref="form"
@@ -40,7 +40,6 @@
                                     <el-checkbox-button label="RESTAURANT" name="placeType" />
                                 </el-checkbox-group>
                             </el-form-item>
-
                             <el-form-item label="MenuType" v-if="!(placeType.toString()==='CAFE'||placeType.toString()==='')" prop="menuType">
                                 <el-radio-group v-model="placeSearch.menuType">
                                     <el-radio :label="menuTypes.ETC.text" name="menuType">{{menuTypes.ETC.label}}</el-radio>
@@ -58,6 +57,34 @@
     </header>
     <section class="border-bottom" id="features">
         <div class="container  my-5">
+
+<!--            스켈레톤-->
+            <el-row gutter="16" v-if="loading">
+                <el-col
+                    v-for="i in 9"
+                    :key="i"
+                    :span="8"
+                    class="el-col"
+
+                >
+            <el-skeleton style="width: 100%"
+             animated>
+                <template #template>
+                    <el-skeleton-item variant="image" style="width: 100%; height: 300px" />
+                    <div style="padding: 14px">
+                        <el-skeleton-item variant="p" style="width: 50%" />
+                        <div style="display: flex;
+            align-items: center;
+            justify-items: space-between;">
+                            <el-skeleton-item variant="text"  />
+                            <el-skeleton-item variant="text" style="width: 30%" />
+                        </div>
+                    </div>
+                </template>
+            </el-skeleton>
+                </el-col>
+            </el-row>
+<!--        place 목록-->
             <el-row  gutter=16>
                 <el-col
                         v-for="(place,index) in places"
@@ -65,19 +92,18 @@
                         :span="8"
                         class="el-col"
                 >
-                    <el-card :body-style="{ padding: '0px' }">
+                    <el-card :body-style="{ padding: '0px', cursor:'pointer' }"
+                             shadow="hover"
+                             @click="placeDetail(place.placeId)">
                         <img :src="'./upload/'+place.placePhotos[0]"
                              class="image"
                         />
-                        <div style="padding: 14px">
+                        <div style="padding: 10px">
                             <span>{{ place.name }}</span>
-                            <div>
-                                {{place.placePhotos[0]}}
-
-                            </div>
+                            <el-tag class="ms-2" type="warning">{{getMenuType(place.menuType)}}</el-tag>
                             <div class="bottom">
-                                <time class="time">{{ place.content }}</time>
-                                <el-button text class="button">Operating</el-button>
+                                <time class="time">{{ place.address }}</time>
+                                <el-button :icon="Star" type="warning" class="ms-1">찜</el-button>
                             </div>
                         </div>
                     </el-card>
@@ -88,14 +114,18 @@
 </template>
 
 <script>
-import {  ref, watchEffect} from "vue";
-import {Search} from "@element-plus/icons-vue";
-import {useToast} from "@/common/toast";
+import {onMounted, ref, watchEffect} from "vue";
+import {Search, Star} from "@element-plus/icons-vue";
+import {useRouter} from "vue-router";
+//import {useToast} from "@/common/toast";
 import axios from "@/common/axios";
 import menuTypes from "../model/menuType";
 export default {
     name: "PlaceList",
     computed: {
+        Star() {
+            return Star
+        },
         menuTypes() {
             return menuTypes
         },
@@ -104,8 +134,10 @@ export default {
         }
     },
     setup(){
-        const {triggerToast} = useToast();
+        const router = useRouter();
+        //const {triggerToast} = useToast();
         const size = ref('default');
+        const loading = ref('false');
         const labelPosition = ref('right')
         const keyword = ref("")
         const category = ref("")
@@ -118,7 +150,15 @@ export default {
             menuType:''
         })
         const places = ref({});
-
+        const getMenuType = (mtype) => {
+            switch (mtype){
+                case menuTypes.KOREAN.text:  return menuTypes.KOREAN.label;
+                case menuTypes.WESTERN.text: return menuTypes.WESTERN.label;
+                case menuTypes.JAPANESE.text: return menuTypes.JAPANESE.label;
+                case menuTypes.CHINESE.text: return menuTypes.CHINESE.label;
+                default: return menuTypes.ETC.label;
+            }
+        }
         watchEffect(()=> {
             if (placeType.value.toString() ==='CAFE') {
                 placeSearch.value.placeType = 'CAFE'
@@ -128,18 +168,7 @@ export default {
             }else{ placeSearch.value.placeType = ''
             }
         })
-        const placeList = async () => {
-            const res = await axios.post('api/place/placelist',placeSearch.value);
-            places.value = res.data
-            console.log(res);
-        }
         const searchPlace = async () => {
-            if(!category.value){
-                triggerToast('검색타입을 선택하세요','warning');
-            return
-            }else if(!keyword.value){
-                triggerToast('검색어를 입력하세요','warning')
-            }
             switch(category.value){
                 case "menu":
                     placeSearch.value.address = ''
@@ -154,10 +183,22 @@ export default {
                     placeSearch.value.address = ''
                     placeSearch.value.placeName = keyword.value; break;
             }
-            const res = await axios.post('api/place/placelist',placeSearch.value);
-            console.log(res);
+            loading.value = true;
+            try {
+                const res = await axios.post('api/place/placelist', placeSearch.value);
+                places.value = res.data
+                loading.value = false;
+            }catch (err){
+                console.log(err);
+            }
         }
-        placeList()
+        onMounted(() => {
+            searchPlace()
+        });
+
+        const placeDetail =(placeId) => {
+            router.push("/detailPlace/"+placeId);
+        }
         return{
             size,
             placeSearch,
@@ -166,9 +207,10 @@ export default {
             category,
             searchPlace,
             placeType,
-            places
-
-
+            places,
+            getMenuType,
+            placeDetail,
+            loading
         }
     }
 }

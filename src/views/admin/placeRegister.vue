@@ -103,7 +103,6 @@
             <el-button type="primary" @click="onSubmit">등록</el-button>
         </el-form-item>
             </el-form>
-            {{placeform}}
         </div>
     </div>
 </template>
@@ -114,6 +113,7 @@ import {useToast} from "@/common/toast";
 import menuTypes from "../../model/menuType";
 import axios from "@/common/axios";
 import {Plus} from "@element-plus/icons-vue";
+import {useRouter} from "vue-router";
 
 export  default {
     components: {Plus},
@@ -124,6 +124,7 @@ export  default {
     },
     setup() {
         const {triggerToast} = useToast();
+        const router = useRouter();
         const placeform = ref({
             name : '',
             startTime : '',
@@ -213,11 +214,11 @@ export  default {
             try{
                 const res = await axios.post('api/place/addplace',placeform.value);
                 console.log("장소등록 완료 (id반환)  : {}",res.data);
+                triggerToast('등록완료')
+                router.push({name: "PlaceList"});
             }catch (err){
                 console.log(err);
             }
-
-             triggerToast('등록완료')
         }
         return {
             placeform,

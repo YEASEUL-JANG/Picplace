@@ -8,6 +8,7 @@ import PlacePic from "@/views/PlacePic.vue";
 import PlaceRegister from "@/views/admin/placeRegister.vue";
 import PlaceList from "@/views/admin/placeList.vue";
 import List from "@/views/PlaceList.vue";
+import DetailPlace from "@/views/DetailPlace.vue";
 
 
 const routes= [
@@ -60,6 +61,11 @@ const routes= [
         name: "PlaceEdit",
         path: "/admin/placeEdit/:placeId",
         component: Register,
+    },
+    {
+        name: "DetailPlace",
+        path: "/detailPlace/:placeId",
+        component: DetailPlace,
     },
 
 ]
