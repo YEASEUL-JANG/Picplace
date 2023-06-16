@@ -31,7 +31,7 @@
                     </el-table>
 
             </div>
-        </div>
+
         <!-- 매장 상세정보-->
         <el-descriptions
             title="매장 상세정보"
@@ -57,8 +57,18 @@
                 <el-button size=large :icon="Star" type="warning" class="m-3" @click="addPicplace(place.placeId)">찜</el-button>
             </el-col>
         </el-row>
+<!--메뉴 carousel-->
+            <div class="gx-4 gx-lg-5 my-5">
+            <el-carousel :interval="4000" type="card" height="400px">
+                <el-carousel-item v-for="menu in place.menuList" :key="menu">
+<!--                    <template v-slot="scope">-->
+                        <img :src="require('../../public/upload/'+menu.menuImage)" style="width: 100%; height: auto;" />
+<!--                    </template>-->
+                </el-carousel-item>
+            </el-carousel>
+            </div>
+     </div>
     </div>
-    {{place}}
 </template>
 
 <script>
