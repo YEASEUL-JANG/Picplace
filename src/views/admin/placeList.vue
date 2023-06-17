@@ -1,5 +1,7 @@
 <template>
 <div class="container my-5">
+    <SearchForm
+        @searchPlace="searchPlace"/>
     <div class="card-body ms-1">
         <el-table
                 v-loading="state.loading"
@@ -81,12 +83,15 @@
 </template>
 
 <script>
-import {onMounted, reactive, ref} from "vue";
+import { reactive} from "vue";
 import axios from "@/common/axios";
 import menuTypes from "@/model/menuType";
+import SearchForm from "@/components/SearchForm.vue";
+import router from "@/router";
 
 export default {
     name: "placeList",
+    components: {SearchForm},
     setup() {
 
         const state = reactive({
@@ -102,41 +107,18 @@ export default {
                 menuType:''
             }
         })
-        const loading = ref(false);
-
-        const getPlaceList = async () => {
-            switch (state.category) {
-                case "menu":
-                    state.placeSearch.address = ''
-                    state.placeSearch.placeName = ''
-                    state.placeSearch.menuKeyword = state.keyword;
-                    break;
-                case "address":
-                    state.placeSearch.placeName = ''
-                    state.placeSearch.menuKeyword = ''
-                    state.placeSearch.address = state.keyword;
-                    break;
-                case "placename":
-                    state.placeSearch.menuKeyword = ''
-                    state.placeSearch.address = ''
-                    state.placeSearch.placeName = state.keyword;
-                    break;
-            }
-            loading.value = true;
+        const searchPlace = async (searchthing) => {
+            state.loading = true;
             try {
-                const res = await axios.post('api/place/placelist', state.placeSearch)
-                console.log("#####placeList",res.data)
+                const res = await axios.post('api/place/placelist', searchthing);
+                console.log("##placeList",res.data)
                 state.places = res.data
-                loading.value = false;
-
-            } catch (err) {
-                console.log(err)
-
+                state.loading = false;
+            }catch (err){
+                console.log(err);
             }
         }
-        onMounted(() => {
-            getPlaceList();
-        })
+
         const getMenuType = (mtype) => {
             switch (mtype){
                 case menuTypes.KOREAN.text:  return menuTypes.KOREAN.label;
@@ -146,14 +128,16 @@ export default {
                 default: return menuTypes.ETC.label;
             }
         }
-        const goDetail = () => {
-
+        const goDetail = (row) => {
+            console.log(row.placeId);
+            router.push("/detailPlace/"+row.placeId);
         }
 
         return{
             state,
             getMenuType,
-            goDetail
+            goDetail,
+            searchPlace
 
         }
     }

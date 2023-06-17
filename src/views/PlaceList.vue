@@ -1,64 +1,14 @@
 <template>
   <!-- Header-->
     <header class="bg-light">
-        <div class="container px-5">
-            <div class="row gx-5 ">
-                <div class="searchBox">
-                    <div class="text-center my-5">
-                        <h1 class="display-5 fw-bolder text-black mb-2">Present your business in a whole new way</h1>
-                        <!-- 검색창 -->
-                        <el-form
-                                class="bg-light searchForm"
-                                ref="form"
-                                :model="placeSearch"
-                                label-width="auto"
-                                :label-position="labelPosition"
-                                :size="size"
-                        >
+        <div class="container my-3">
+            <!-- 검색창 -->
+            <SearchForm @searchPlace="searchPlace"/>
 
-                            <el-form-item label="PlaceType">
-                                <el-checkbox-group v-model="placeType">
-                                    <el-checkbox-button label="CAFE" name="placeType" />
-                                    <el-checkbox-button label="RESTAURANT" name="placeType" />
-                                </el-checkbox-group>
-                            </el-form-item>
-                            <el-form-item label="MenuType" v-if="!(placeType.toString()==='CAFE'||placeType.toString()==='')" prop="menuType">
-                                <el-radio-group v-model="placeSearch.menuType">
-                                    <el-radio :label="menuTypes.ETC.text" name="menuType">{{menuTypes.ETC.label}}</el-radio>
-                                    <el-radio :label="menuTypes.KOREAN.text" name="menuType">{{menuTypes.KOREAN.label}}</el-radio>
-                                    <el-radio :label="menuTypes.CHINESE.text" name="menuType">{{menuTypes.CHINESE.label}}</el-radio>
-                                    <el-radio :label="menuTypes.JAPANESE.text" name="menuType">{{menuTypes.JAPANESE.label}}</el-radio>
-                                    <el-radio :label="menuTypes.WESTERN.text" name="menuType">{{menuTypes.WESTERN.label}}</el-radio>
-                                </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="Search">
-                                <el-input
-                                        v-model="keyword"
-                                        placeholder="검색어를 입력하세요."
-                                        class="input-with-select"
-                                >
-                                    <template #prepend>
-                                        <el-select v-model="category" placeholder="Select" style="width: 115px">
-                                            <el-option label="메뉴" value="menu" />
-                                            <el-option label="주소" value="address" />
-                                            <el-option label="매장명" value="placename" />
-                                        </el-select>
-                                    </template>
-                                    <template #append>
-                                        <el-button :icon="Search" @click="searchPlace"/>
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-
-                        </el-form>
-                    </div>
-                </div>
-            </div>
         </div>
     </header>
     <section class="border-bottom" id="features">
-        <div class="container  my-5">
-
+        <div class="container  my-3">
 <!--            스켈레톤-->
             <el-row gutter="16" v-if="loading">
                 <el-col
@@ -85,6 +35,9 @@
             </el-skeleton>
                 </el-col>
             </el-row>
+            <div class="my-2">
+                <div id="map" style="width:100%;height:350px;"></div>
+            </div>
 <!--        place 목록-->
             <el-row  gutter=16>
                 <el-col
@@ -115,41 +68,89 @@
 </template>
 
 <script>
-import {onMounted, ref, watchEffect} from "vue";
-import {Search, Star} from "@element-plus/icons-vue";
+import { ref} from "vue";
+import { Star} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import axios from "@/common/axios";
-import menuTypes from "../model/menuType";
+import SearchForm from "@/components/SearchForm.vue";
+import menuTypes from "@/model/menuType";
+
 export default {
     name: "PlaceList",
+    components: {SearchForm},
     computed: {
         Star() {
             return Star
         },
-        menuTypes() {
-            return menuTypes
-        },
-        Search() {
-            return Search
-        }
     },
     setup(){
         const router = useRouter();
         //const {triggerToast} = useToast();
-        const size = ref('default');
         const loading = ref('false');
-        const labelPosition = ref('right')
-        const keyword = ref("")
-        const category = ref("")
-        const placeType = ref([]);
-        const placeSearch = ref({
-            placeName: '',
-            menuKeyword: '',
-            address: '',
-            placeType: '',
-            menuType:''
-        })
         const places = ref([]);
+        const positions = ref([]);
+
+
+
+        const searchPlace = async (searchthing) => {
+            if(searchthing == null){
+                searchthing = ({
+                    placeName: '',
+                    menuKeyword: '',
+                    address: '',
+                    placeType: '',
+                    menuType:''
+                })
+            }
+            loading.value = true;
+            positions.value = []
+            try {
+                const res = await axios.post('api/place/placelist', searchthing);
+                console.log("##placeList",res.data)
+                places.value = res.data
+                loading.value = false;
+                //지도 준비
+                const mapContainer = document.getElementById("map"),
+                    mapOption = {
+                        center: new window.kakao.maps.LatLng(places.value[0].lat, places.value[0].lng),
+                        level: 4
+                    }
+                    console.log("##mapOption: ",mapOption)
+                const map = new  window.kakao.maps.Map(mapContainer, mapOption);
+                for(const place of places.value){
+                    positions.value.push({
+                        content: '<div>'+place.name+'</div>',
+                        latlng: new window.kakao.maps.LatLng(place.lat,place.lng)
+                    })
+                }
+                console.log("##positions: ",positions)
+                for(let i=0; i<positions.value.length; i++){
+                    let marker = new window.kakao.maps.Marker({
+                        map: map,
+                        position: positions.value[i].latlng
+                    });
+                    let infowindow = new window.kakao.maps.InfoWindow({
+                        content: positions.value[i].content
+                    })
+                    window.kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+                    window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+                }
+
+            }catch (err){
+                console.log(err);
+            }
+        }
+        const makeOverListener = (map,marker,infowindow)=> {
+            return function (){
+                infowindow.open(map, marker);
+            }
+        }
+        const makeOutListener = (infowindow)=> {
+            return function (){
+                infowindow.close();
+            }
+        }
+
         const getMenuType = (mtype) => {
             switch (mtype){
                 case menuTypes.KOREAN.text:  return menuTypes.KOREAN.label;
@@ -159,79 +160,25 @@ export default {
                 default: return menuTypes.ETC.label;
             }
         }
-        watchEffect(()=> {
-            if (placeType.value.toString() ==='CAFE') {
-                placeSearch.value.placeType = 'CAFE'
-                placeSearch.value.menuType = ''
-            }else if(placeType.value.toString() ==='RESTAURANT') {
-                placeSearch.value.placeType = 'RESTAURANT'
-            }else{ placeSearch.value.placeType = ''
-            }
-        })
-        const searchPlace = async () => {
-            switch(category.value){
-                case "menu":
-                    placeSearch.value.address = ''
-                    placeSearch.value.placeName = ''
-                    placeSearch.value.menuKeyword = keyword.value; break;
-                case "address":
-                    placeSearch.value.placeName = ''
-                    placeSearch.value.menuKeyword = ''
-                    placeSearch.value.address = keyword.value; break;
-                case "placename":
-                    placeSearch.value.menuKeyword = ''
-                    placeSearch.value.address = ''
-                    placeSearch.value.placeName = keyword.value; break;
-            }
-            loading.value = true;
-            try {
-                const res = await axios.post('api/place/placelist', placeSearch.value);
-                console.log("##placeList",res.data)
-                places.value = res.data
-                loading.value = false;
-            }catch (err){
-                console.log(err);
-            }
-        }
-        onMounted(() => {
-            searchPlace()
-        });
-
         const placeDetail =(placeId) => {
             router.push("/detailPlace/"+placeId);
         }
         return{
-            size,
-            placeSearch,
-            labelPosition,
-            keyword,
-            category,
             searchPlace,
-            placeType,
             places,
-            getMenuType,
             placeDetail,
-            loading
+            loading,
+            getMenuType,
+            positions
         }
     }
 }
 </script>
 
 <style scoped>
-.searchForm{
-    padding: 20px;
-    border-radius: 10px;
-    margin: 10px;
 
-}
-.searchBox{
-    width: 100%;
-}
 .el-col{
     margin-bottom: 16px;
-}
-.el-radio-group{
-    margin-right: 12px;
 }
 
 .time {
@@ -251,7 +198,9 @@ export default {
     padding: 0;
     min-height: auto;
 }
-
+.searchBox{
+    width: 100%;
+}
 .image {
     width: 100%;
     display: block;

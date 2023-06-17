@@ -105,6 +105,9 @@
             </el-form>
         </div>
     </div>
+
+    {{placeform}}
+    {{rawPlacePhotos}}
 </template>
 
 <script>
@@ -134,6 +137,8 @@ export  default {
             menuType: '',
             address: '',
             detailAddress: '',
+            lat: '',
+            lng: '',
             zipcode: '',
             menuList: [{
                 menuName : '',
@@ -156,10 +161,28 @@ export  default {
                     }
                     placeform.value.zipcode = data.zonecode;
                     placeform.value.address = addr;
+
+                    getLALOInfo(addr);
+
+
                     // 커서를 상세주소 필드로 이동한다.
                     document.getElementById("detailaddress").focus();
                 }
             }).open();
+        }
+        const getLALOInfo = async (address)=> {
+            const placeAddress = address;
+            const url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURI(placeAddress);
+            const axiosResult = await axios({
+                url: url,
+                method: 'get',
+                headers: {
+                    Authorization: 'KakaoAK '+'dad17b185c00ef6c17a4822c4df677fd',
+                },
+            });
+            placeform.value.lat = axiosResult.data.documents[0].address.y;
+            placeform.value.lng = axiosResult.data.documents[0].address.x;
+            console.log("위도, 경도값 : ",placeform.value.lat+","+placeform.value.lng)
         }
         const formData = new FormData();
         const addDomain = () => {
@@ -185,7 +208,22 @@ export  default {
         }
 
         const onSubmit = async () => {
-            //메뉴 파일 추가
+            if(placeform.value.placeType ==='CAFE'){
+                placeform.value.menuType = menuTypes.ETC.text
+            }
+
+            for(const menu of placeform.value.menuList){
+                if(menu.menuName==''||menu.price==0||menu.menuImage=='') {
+                    triggerToast("1개 이상의 메뉴를 등록하셔야합니다.","danger")
+                    return;
+                }
+            }
+            if(rawPlacePhotos.value.length<1) {
+                triggerToast("1개 이상의 매장사진을 등록하셔야합니다.","danger")
+                return;
+            }
+
+            // //메뉴 파일 추가
             const menuElements = document.getElementsByClassName('menuImage');
             for (let i = 0; i < menuElements.length; i++) {
                 const menu = menuElements[i].files[0];
@@ -207,16 +245,21 @@ export  default {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                console.log("업로드 메뉴갯수 : {}",res.data);
+                if(res.data.code == 200){
+                    console.log("업로드 메뉴갯수 : {}",res.data);
+                    const res2 = await axios.post('api/place/addplace',placeform.value);
+                    if(res2.data.code == 200){
+                        console.log("장소등록 완료 (id반환)  : {}",res2.data);
+                        triggerToast('등록완료')
+                        router.push({name: "PlaceList"});
+                    }
+                }else{
+                    triggerToast(res.data.message);
+                }
+
+
+
             }catch(err){
-                console.log(err);
-            }
-            try{
-                const res = await axios.post('api/place/addplace',placeform.value);
-                console.log("장소등록 완료 (id반환)  : {}",res.data);
-                triggerToast('등록완료')
-                router.push({name: "PlaceList"});
-            }catch (err){
                 console.log(err);
             }
         }

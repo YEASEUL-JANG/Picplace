@@ -3,7 +3,7 @@ const MenuType = {
     WESTERN : {label: '양식', text: 'WESTERN'},
     JAPANESE : {label: '일식', text: 'JAPANESE'},
     CHINESE: {label: '중식', text: 'CHINESE'},
-    ETC : {label: '전체', text: ''}
+    ETC : {label: '기타', text: 'ETC'}
 };
 
 export default MenuType;

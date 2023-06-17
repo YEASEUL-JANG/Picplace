@@ -37,20 +37,107 @@
                     </el-select>
                 </template>
                 <template #append>
-                    <el-button :icon="Search" @click="searchPlace"/>
+                    <el-button :icon="Search" @click="onSearch"/>
                 </template>
             </el-input>
         </el-form-item>
-
     </el-form>
 </template>
 
 <script>
+import {onMounted, ref, watchEffect} from "vue";
+import menuTypes from "../model/menuType";
+import {Search} from "@element-plus/icons-vue";
 export default {
-    name: "SearchForm"
+    name: "SearchForm",
+    computed:{
+        menuTypes() {
+            return menuTypes
+        },
+        Search() {
+            return Search
+        },
+    },
+    props:{
+
+    },
+    setup(props, context){
+        const placeSearch = ref({
+            placeName: '',
+            menuKeyword: '',
+            address: '',
+            placeType: '',
+            menuType:''
+        })
+        const keyword = ref("")
+        const category = ref("")
+        const placeType = ref([]);
+        const size = ref('default');
+        const labelPosition = ref('right')
+
+        watchEffect(()=> {
+            if (placeType.value.toString() ==='CAFE') {
+                placeSearch.value.placeType = 'CAFE'
+                placeSearch.value.menuType = ''
+            }else if(placeType.value.toString() ==='RESTAURANT') {
+                placeSearch.value.placeType = 'RESTAURANT'
+            }else{ placeSearch.value.placeType = ''
+            }
+        })
+
+        const onSearch = () => {
+            switch(category.value){
+                case "menu":
+                    placeSearch.value.address = ''
+                    placeSearch.value.placeName = ''
+                    placeSearch.value.menuKeyword = keyword.value; break;
+                case "address":
+                    placeSearch.value.placeName = ''
+                    placeSearch.value.menuKeyword = ''
+                    placeSearch.value.address = keyword.value; break;
+                case "placename":
+                    placeSearch.value.menuKeyword = ''
+                    placeSearch.value.address = ''
+                    placeSearch.value.placeName = keyword.value; break;
+            }
+            context.emit('searchPlace',placeSearch.value);
+        }
+        onMounted( () => {
+            if(window.kakao && window.kakao.maps){
+                onSearch();
+            }else {
+                loadScript();
+            }
+        })
+        const loadScript = () => {
+            const script = document.createElement("script")
+            script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=cecdc2b9460792373bea4e3003d3d9ae";
+            script.onload = () => window.kakao.maps.load(onSearch());
+            document.head.appendChild(script) //html>head 안에 스크립트를 추가
+        }
+        return{
+            placeSearch,
+            keyword,
+            category,
+            onSearch,
+            placeType,
+            size,
+            labelPosition
+        }
+    }
 }
 </script>
 
 <style scoped>
+.searchForm{
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px;
 
+}
+
+
+el-radio-group{
+    margin-right: 12px;
+}
 </style>
