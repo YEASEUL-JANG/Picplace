@@ -121,6 +121,8 @@ public class PlaceRepository {
         placeForm.setPlaceType(place.getPlaceType());
         placeForm.setMenuType(place.getMenuType());
         placeForm.setAddress(place.getAddress().getAddress());
+        placeForm.setLat(place.getLat());
+        placeForm.setLng(place.getLng());
         placeForm.setDetailAddress(place.getAddress().getDetailAddress());
         placeForm.setZipcode(place.getAddress().getZipcode());
         placeForm.setMenuList(menus);

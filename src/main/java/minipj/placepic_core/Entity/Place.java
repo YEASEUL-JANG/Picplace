@@ -34,6 +34,9 @@ public class Place {
     @Embedded
     private Address address; //주소
 
+    private String lat;//위도
+    private String lng;//경도
+
     @Enumerated(EnumType.STRING)
     private PlaceType placeType; //가게타입
 
@@ -41,15 +44,15 @@ public class Place {
     private MenuType menuType; //가게타입
 
     //CascadeType.ALL : place를 persist 하면 menuList도 모두 persist되게한다.
-    @JsonIgnore
+
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL) //메뉴리스트
     private List<Menu> menuList = new ArrayList<>();
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlacePhoto> placePhotos= new ArrayList<>();
 
@@ -84,6 +87,8 @@ public class Place {
             String endTime,
             String content,
             Address address,
+            String lat,
+            String lng,
             PlaceType placeType,
             MenuType menuType,
             List<String> placePhotos,
@@ -100,6 +105,8 @@ public class Place {
         place.setEndTime(endTime);
         place.setContent(content);
         place.setAddress(address);
+        place.setLat(lat);
+        place.setLng(lng);
         place.setPlaceType(placeType);
         place.setMenuType(menuType);
         return place;

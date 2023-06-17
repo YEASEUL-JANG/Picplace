@@ -41,7 +41,7 @@ public class PlaceService {
         log.info("[createPlace] Place 객체에 정보 저장");
         Place place = Place.createPlace(form.getName(), form.getStartTime(),
                 form.getEndTime(), form.getContent(),
-                address, form.getPlaceType(),form.getMenuType(),
+                address,form.getLat(),form.getLng(), form.getPlaceType(),form.getMenuType(),
                  form.getPlacePhotos(), form.getMenuList());
         log.info("[createPlace] place 등록 진행");
         Long placeId = placeRepository.save(place);
@@ -49,6 +49,7 @@ public class PlaceService {
 
         return placeId;
     }
+
 
     public List<PlaceForm> findPlaces(PlaceSearch placeSearch) {
     log.info("[findAllPlace] Place 목록 출력");
@@ -72,7 +73,7 @@ public class PlaceService {
         return placeRepository.editPlace(form);
     }
     @Transactional
-    public void uploadMenuImage(MultipartFile menuImage) throws IOException {
+    public String uploadMenuImage(MultipartFile menuImage) throws IOException {
 
         //본래 파일이름
         String origName = menuImage.getOriginalFilename();
@@ -83,14 +84,15 @@ public class PlaceService {
         String savedPath = fileDir + origName;
         //로컬에 저장
         menuImage.transferTo(new File(savedPath));
-
+        return origName;
     }
 
     @Transactional
-    public void uploadPlaceImage(MultipartFile placeImage) throws IOException {
+    public String uploadPlaceImage(MultipartFile placeImage) throws IOException {
         String origName = placeImage.getOriginalFilename();
         String savedPath = fileDir + origName;
         placeImage.transferTo(new File(savedPath));
+        return origName;
     }
 
     @Transactional

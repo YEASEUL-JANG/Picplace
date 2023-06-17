@@ -19,6 +19,8 @@ public class PlaceForm {
     private String content; //내용
     private PlaceType placeType; //가게타입
     private MenuType menuType; //메뉴타입
+    private String lat; //위도
+    private String lng; //경도
 
     //주소
     private String address;

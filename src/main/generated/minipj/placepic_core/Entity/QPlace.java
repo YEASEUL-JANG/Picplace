@@ -28,6 +28,10 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final StringPath endTime = createString("endTime");
 
+    public final StringPath lat = createString("lat");
+
+    public final StringPath lng = createString("lng");
+
     public final ListPath<Menu, QMenu> menuList = this.<Menu, QMenu>createList("menuList", Menu.class, QMenu.class, PathInits.DIRECT2);
 
     public final EnumPath<MenuType> menuType = createEnum("menuType", MenuType.class);

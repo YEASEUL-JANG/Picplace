@@ -1,5 +1,6 @@
 package minipj.placepic_core.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +19,12 @@ public class PicPlace {
     @Column(name="picplace_id")
     private Long picplaceId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="place_id")
     private Place place;
