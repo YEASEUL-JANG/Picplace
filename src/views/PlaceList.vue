@@ -36,7 +36,9 @@
                 </el-col>
             </el-row>
             <div class="my-2">
-                <div id="map" style="width:100%;height:350px;"></div>
+                <PlaceMap @onSearch="searchPlace"
+                          :height="mapsize"
+                />
             </div>
 <!--        place 목록-->
             <el-row  gutter=16>
@@ -50,7 +52,7 @@
                              shadow="hover"
                              @click="placeDetail(place.placeId)">
                         <img :src="'./upload/'+place.placePhotos[0]"
-                             class="image"
+                             class="image" style="width:100%;height:350px;"
                         />
                         <div style="padding: 10px">
                             <span>{{ place.name }}</span>
@@ -74,10 +76,11 @@ import {useRouter} from "vue-router";
 import axios from "@/common/axios";
 import SearchForm from "@/components/SearchForm.vue";
 import menuTypes from "@/model/menuType";
+import PlaceMap from "@/components/PlaceMap.vue";
 
 export default {
     name: "PlaceList",
-    components: {SearchForm},
+    components: { PlaceMap, SearchForm},
     computed: {
         Star() {
             return Star
@@ -89,9 +92,8 @@ export default {
         const loading = ref('false');
         const places = ref([]);
         const positions = ref([]);
-
-
-
+        const mapsize = ref(350);
+        const map = ref(null);
         const searchPlace = async (searchthing) => {
             if(searchthing == null){
                 searchthing = ({
@@ -109,44 +111,52 @@ export default {
                 console.log("##placeList",res.data)
                 places.value = res.data
                 loading.value = false;
-                //지도 준비
-                const mapContainer = document.getElementById("map"),
-                    mapOption = {
-                        center: new window.kakao.maps.LatLng(places.value[0].lat, places.value[0].lng),
-                        level: 4
-                    }
-                    console.log("##mapOption: ",mapOption)
-                const map = new  window.kakao.maps.Map(mapContainer, mapOption);
-                for(const place of places.value){
-                    positions.value.push({
-                        content: '<div>'+place.name+'</div>',
-                        latlng: new window.kakao.maps.LatLng(place.lat,place.lng)
-                    })
-                }
-                console.log("##positions: ",positions)
-                for(let i=0; i<positions.value.length; i++){
-                    let marker = new window.kakao.maps.Marker({
-                        map: map,
-                        position: positions.value[i].latlng
-                    });
-                    let infowindow = new window.kakao.maps.InfoWindow({
-                        content: positions.value[i].content
-                    })
-                    window.kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-                    window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-                }
+                readyMap();
 
             }catch (err){
                 console.log(err);
             }
         }
+
+        const readyMap = () => {
+            if (places.value.length === 0) {
+                return;
+            }
+            //지도 준비
+            const mapContainer = document.getElementById("map"),
+                mapOption = {
+                    center: new window.kakao.maps.LatLng(places.value[0].lat, places.value[0].lng),
+                    level: 4
+                }
+            console.log("##mapOption: ", mapOption)
+            map.value = new window.kakao.maps.Map(mapContainer, mapOption);
+            for (const place of places.value) {
+                positions.value.push({
+                    content: '<div>' + place.name + '</div>',
+                    latlng: new window.kakao.maps.LatLng(place.lat, place.lng)
+                })
+            }
+            console.log("##positions: ", positions)
+            for (let i = 0; i < positions.value.length; i++) {
+                let marker = new window.kakao.maps.Marker({
+                    map: map.value,
+                    position: positions.value[i].latlng
+                });
+                let infowindow = new window.kakao.maps.InfoWindow({
+                    content: positions.value[i].content
+                })
+                window.kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map.value, marker, infowindow));
+                window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+            }
+        }
+
         const makeOverListener = (map,marker,infowindow)=> {
             return function (){
                 infowindow.open(map, marker);
             }
         }
         const makeOutListener = (infowindow)=> {
-            return function (){
+            return function () {
                 infowindow.close();
             }
         }
@@ -169,7 +179,8 @@ export default {
             placeDetail,
             loading,
             getMenuType,
-            positions
+            positions,
+            mapsize,
         }
     }
 }
