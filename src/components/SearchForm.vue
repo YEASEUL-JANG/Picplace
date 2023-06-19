@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {onMounted, ref, watchEffect} from "vue";
+import {ref, watchEffect} from "vue";
 import menuTypes from "../model/menuType";
 import {Search} from "@element-plus/icons-vue";
 export default {
@@ -102,19 +102,7 @@ export default {
             }
             context.emit('searchPlace',placeSearch.value);
         }
-        onMounted( () => {
-            if(window.kakao && window.kakao.maps){
-                onSearch();
-            }else {
-                loadScript();
-            }
-        })
-        const loadScript = () => {
-            const script = document.createElement("script")
-            script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=cecdc2b9460792373bea4e3003d3d9ae";
-            script.onload = () => window.kakao.maps.load(onSearch());
-            document.head.appendChild(script) //html>head 안에 스크립트를 추가
-        }
+
         return{
             placeSearch,
             keyword,
