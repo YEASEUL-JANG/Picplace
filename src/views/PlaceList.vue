@@ -59,7 +59,7 @@
                             <el-tag class="ms-2" type="warning">{{getMenuType(place.menuType)}}</el-tag>
                             <div class="bottom">
                                 <time class="time">{{ place.address }}</time>
-                                <el-button :icon="Star" type="warning" class="ms-1">찜</el-button>
+                                <el-button :icon="Star" type="warning"  @click.stop="addPicplace(place.placeId)" class="ms-1">찜</el-button>
                             </div>
                         </div>
                     </el-card>
@@ -70,13 +70,15 @@
 </template>
 
 <script>
-import { ref} from "vue";
+import {computed, ref} from "vue";
 import { Star} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import axios from "@/common/axios";
 import SearchForm from "@/components/SearchForm.vue";
 import menuTypes from "@/model/menuType";
 import PlaceMap from "@/components/PlaceMap.vue";
+import {useToast} from "@/common/toast";
+import store from "@/store";
 
 export default {
     name: "PlaceList",
@@ -88,7 +90,8 @@ export default {
     },
     setup(){
         const router = useRouter();
-        //const {triggerToast} = useToast();
+        const currentUser = computed(() => store.getters["getcurrentUser"]);
+        const {triggerToast} = useToast();
         const loading = ref('false');
         const places = ref([]);
         const positions = ref([]);
@@ -109,7 +112,7 @@ export default {
             try {
                 const res = await axios.post('api/place/placelist', searchthing);
                 console.log("##placeList",res.data)
-                places.value = res.data
+                places.value = res.data.data
                 loading.value = false;
                 readyMap();
 
@@ -123,8 +126,9 @@ export default {
                 return;
             }
             //지도 준비
-            const mapContainer = document.getElementById("map"),
-                mapOption = {
+            const mapContainer = document.getElementById("map")
+
+               const mapOption = {
                     center: new window.kakao.maps.LatLng(places.value[0].lat, places.value[0].lng),
                     level: 4
                 }
@@ -170,6 +174,26 @@ export default {
                 default: return menuTypes.ETC.label;
             }
         }
+        const addPicplace = async (placeId) => {
+            try {
+                const userid = currentUser.value.userId;
+                console.log("유저아이디 : " + userid + " place아이디 : " + placeId);
+                const res = await axios.post("api/place/placePic/" + placeId, {
+                    userId: userid
+                });
+                console.log("찜데이터",res.data)
+                if (res.data.code == 200) {
+                    triggerToast("찜목록에 추가되었습니다.");
+                }
+            } catch (err) {
+                if (err?.response?.status === 409) {
+                    triggerToast("이미 찜한 장소입니다.", "danger");
+                } else {
+                    triggerToast("Unexpected error occurred", "danger");
+                }
+                console.log(err);
+            }
+        }
         const placeDetail =(placeId) => {
             router.push("/detailPlace/"+placeId);
         }
@@ -181,6 +205,7 @@ export default {
             getMenuType,
             positions,
             mapsize,
+            addPicplace
         }
     }
 }

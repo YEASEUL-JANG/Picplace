@@ -54,7 +54,7 @@
                 <el-button size=large  type="success" class="m-3" @click="goList">목록</el-button>
             </el-col>
             <el-col :span="2">
-                <el-button size=large :icon="Star" type="warning" class="m-3" @click="addPicplace(place.placeId)">찜</el-button>
+                <el-button size=large :icon="Star" type="warning" class="m-3" @click.stop="addPicplace(place.placeId)">찜</el-button>
             </el-col>
         </el-row>
 <!--메뉴 carousel-->
@@ -117,7 +117,7 @@ export default {
         const loadPlace = async () => {
             try {
                 const res = await axios.get("api/place/placedetail/" + placeId);
-                place.value = res.data;
+                place.value = res.data.data;
                 const mapContainer = document.getElementById("map"),
                     mapOption = {
                         center: new window.kakao.maps.LatLng(place.value.lat, place.value.lng),
@@ -156,7 +156,8 @@ export default {
                 const res = await axios.post("api/place/placePic/" + placeId, {
                     userId: userid
                 });
-                if (res.data > -1) {
+                console.log("찜데이터",res.data)
+                if (res.data.code == 200) {
                     triggerToast("찜목록에 추가되었습니다.");
                 }
             } catch (err) {

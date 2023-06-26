@@ -1,9 +1,9 @@
 <template>
     <section class="border-bottom" id="features">
-        <div class="container  my-3">
+        <div  class="container  my-3">
             <div class="row my-2">
                 <div class="col-lg-6">
-                <PlaceMap @onSearch="searchPlace"
+                <PlaceMap @onSearch="picplace"
                           :height="mapsize"/>
                 </div>
 
@@ -27,7 +27,7 @@
                             <el-tag class="ms-2" type="warning">{{getMenuType(place.menuType)}}</el-tag>
                             <div class="bottom">
                                 <time class="time">{{ place.address }}</time>
-                                <el-button :icon="Star" type="warning" class="ms-1">찜</el-button>
+                                <el-button :icon="Star" type="warning"  @click.stop="deletePic(place.placeId)" class="ms-1">삭제</el-button>
                             </div>
                         </div>
                     </el-card>
@@ -36,16 +36,21 @@
             </div>
             </div>
         </div>
+        <div  v-if="places.length == 0" class="container  my-3">
+            찜한 장소가 없습니다.
+        </div>
     </section>
 </template>
 
 <script>
-import { ref} from "vue";
+import {computed, ref} from "vue";
 import { Star} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import axios from "@/common/axios";
 import menuTypes from "@/model/menuType";
 import PlaceMap from "@/components/PlaceMap.vue";
+import store from "@/store";
+import {useToast} from "@/common/toast";
 
 export default {
     name: "PlacePic",
@@ -57,28 +62,21 @@ export default {
     },
     setup(){
         const router = useRouter();
-        //const {triggerToast} = useToast();
+        const {triggerToast} = useToast();
         const loading = ref('false');
         const places = ref([]);
         const positions = ref([]);
         const map = ref(null);
         const mapsize = ref(800);
-        const searchPlace = async (searchthing) => {
-            if(searchthing == null){
-                searchthing = ({
-                    placeName: '',
-                    menuKeyword: '',
-                    address: '',
-                    placeType: '',
-                    menuType:''
-                })
-            }
+        const currentUser = computed(() => store.getters["getcurrentUser"]);
+        const picplace = async () => {
+            console.log("##userInfo",currentUser)
             loading.value = true;
             positions.value = []
-            try {
-                const res = await axios.post('api/place/placelist', searchthing);
-                console.log("##placeList",res.data)
-                places.value = res.data
+            try { //찜목록 조회
+                const res = await axios.post('api/place/placePicList/'+currentUser.value.userId);
+                console.log("##PicPlaceList",res.data)
+                places.value = res.data.data
                 loading.value = false;
                 readyMap();
             }catch (err){
@@ -142,13 +140,30 @@ export default {
         const placeDetail =(placeId) => {
             router.push("/detailPlace/"+placeId);
         }
+        const deletePic = async (placeId) => {
+            const userId = {
+                userId: currentUser.value.userId
+            }
+            const res = await axios.post("api/place/placePic/delete/"+placeId,userId)
+            console.log("deletePic: ",res.data)
+            if(res.data.code == 200){
+                triggerToast("삭제되었습니다.")
+                picplace();
+
+            }else{
+                triggerToast("Unknown Error","danger")
+            }
+
+        }
+
         return{
-            searchPlace,
+            picplace,
             places,
             placeDetail,
             loading,
             getMenuType,
-            mapsize
+            mapsize,
+            deletePic
         }
     }
 }

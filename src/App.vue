@@ -17,7 +17,7 @@
                                 }}</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                                 <li><router-link to="/placepic" class="nav-link">My PlacePic</router-link></li>
-                                <li><router-link to="/profile" class="nav-link">Profile</router-link></li>
+                                <li><router-link to="#" class="nav-link" @click="goProfile">Profile</router-link></li>
                                 <li><router-link to="#" class="nav-link" @click="logOut">Logout</router-link></li>
                             </ul>
                         </li>
@@ -70,15 +70,21 @@ export default {
       const isAdmin = computed(() => {
           return currentUser.value?.role === "ADMIN";
       });
+      const goProfile = () => {
+          const userid = currentUser.value.userId;
+          router.push({path:"/profile/"+userid})
+      }
+
       const logOut = () => {
           store.dispatch("clearUser");
           triggerToast("로그아웃 되었습니다.");
           router.push({name: "Login"});
       }
       return{
-          currentUser,
           logOut,
-          isAdmin
+          isAdmin,
+          goProfile,
+          currentUser
       }
   }
 }
