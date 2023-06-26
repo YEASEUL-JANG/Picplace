@@ -2,7 +2,7 @@ package minipj.placepic_core.Config.quartz;
 
 import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.schedule.QuartzHandler;
-import minipj.placepic_core.schedule.TestJob;
+import minipj.placepic_core.schedule.RenewPicJob;
 import org.quartz.SchedulerException;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,7 +27,7 @@ public class JobConfig {
         map.put("dateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         try{//크론형식 지정 후 스케줄 시작
-            quartzHandler.addJob(TestJob.class,"testName","test입니다",map,"0/10 * * * * ?");
+            quartzHandler.addJob(RenewPicJob.class,"testName","test입니다",map,"0/10 * * * * ?");
         }catch (SchedulerException e){
             e.printStackTrace();
         }

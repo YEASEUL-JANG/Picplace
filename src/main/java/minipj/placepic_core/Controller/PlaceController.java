@@ -111,6 +111,11 @@ public ApiResponse uploadImage(@RequestParam("menuImages") List<MultipartFile> m
         logger.info("[place_pic] 장소찜목록 ,userId : {}", userId);
         return ApiResponse.success(placeService.findPicPlaces(userId));
     }
+    @ApiOperation(value="전체찜목록",notes = "@Quartz를 활용한 전체 찜장소목록")
+    @PostMapping("/placePicList")
+    public List<PicPlace> placePicListAll(){
+        return placeService.findAllPicPlaces();
+    }
 
     @ApiOperation(value="찜삭제",notes = "@PathVariable를 활용한 장소찜 삭제")
     @PostMapping("/placePic/delete/{placeId}")

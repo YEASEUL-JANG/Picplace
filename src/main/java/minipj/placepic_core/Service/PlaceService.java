@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import minipj.placepic_core.Controller.PlaceForm;
 import minipj.placepic_core.Entity.Address;
+import minipj.placepic_core.Entity.PicPlace;
 import minipj.placepic_core.Entity.Place;
 import minipj.placepic_core.Entity.User;
 import minipj.placepic_core.Repository.PlaceRepository;
@@ -106,13 +107,23 @@ public class PlaceService {
         return placeRepository.placePic(placeId,picuser.get());
     }
 
-    @Transactional
+
+    @Transactional(rollbackFor = Exception.class)
     public void deletePlacePic(Long userId, Long placeId) {
-        placeRepository.deletePlacePic(userId,placeId);
+        try {
+            placeRepository.deletePlacePic(userId, placeId);
+        }catch (Exception e){
+            log.error("[Error] deletePlacePic 에러발생");
+        }
     }
 
     public List<PlaceForm> findPicPlaces(Long userId) {
         log.info("[placePic] 찜목록 조회");
         return placeRepository.findPicPlaces(userId);
+    }
+
+    public List<PicPlace> findAllPicPlaces() {
+        log.info("[placePic] 찜목록 전체조회");
+        return placeRepository.findAllPicPlaces();
     }
 }

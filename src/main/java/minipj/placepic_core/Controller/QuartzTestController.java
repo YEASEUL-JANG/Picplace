@@ -3,7 +3,7 @@ package minipj.placepic_core.Controller;
 import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.response.ApiResponse;
 import minipj.placepic_core.schedule.QuartzHandler;
-import minipj.placepic_core.schedule.TestJob;
+import minipj.placepic_core.schedule.RenewPicJob;
 import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ public class QuartzTestController {
         Map map = new HashMap<>();
         map.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-        quartzHandler.addJob(TestJob.class,name,"test입니다",map,"0/10 * * * * ?");
+        quartzHandler.addJob(RenewPicJob.class,name,"test입니다",map,"0/10 * * * * ?");
         return ApiResponse.success();
     }
     @GetMapping("/dlt")

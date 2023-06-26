@@ -1,6 +1,7 @@
 package minipj.placepic_core.schedule;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 
@@ -8,18 +9,19 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class QuartzHandler {
 
     private final Scheduler scheduler;
 
     public <T extends Job> void addJob(Class<? extends Job> job, String name, String desc, Map params,String cron) throws SchedulerException{
-        //jobdetail객체생성
+        log.info("[addJob] jobDetail 객체 생성");
         JobDetail jobDetail = buildJobDetail(job, name, desc, params);
-        //job 실행조건 trigger 생성
+        log.info("[addJob] job 실행조건 trigger 생성");
         Trigger trigger = buildCronTrigger(cron);
-        //job 중복체크
+        log.info("[addJob] job 중복체크");
         if(scheduler.checkExists(jobDetail.getKey())) scheduler.deleteJob(jobDetail.getKey());
-        //job생성
+        log.info("[addJob] job 생성");
         scheduler.scheduleJob(jobDetail, trigger);
     }
     //Trigger 설정 (job의 실행조건)

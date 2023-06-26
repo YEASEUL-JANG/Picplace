@@ -2,8 +2,10 @@ package minipj.placepic_core.Repository;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import minipj.placepic_core.Controller.MenuForm;
 import minipj.placepic_core.Controller.PlaceForm;
 import minipj.placepic_core.Entity.*;
@@ -17,6 +19,7 @@ import java.util.List;
 import static minipj.placepic_core.Entity.QPlace.place;
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class PlaceRepository {
 
@@ -224,10 +227,21 @@ public class PlaceRepository {
     }
 
     public void deletePlacePic(Long userId, Long placeId) {
-        em.createQuery("delete from PicPlace p where p.user.userId=:userid" +
+        int result = em.createQuery("delete from PicPlace p where p.user.userId=:userid" +
                         " and p.place.placeId=:placeId")
                 .setParameter("userid",userId)
                 .setParameter("placeId",placeId)
                 .executeUpdate();
+        log.info("삭제된 쿼리 수 : {}",result);
+    }
+
+    public List<PicPlace> findAllPicPlaces() {
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        QPicPlace picPlace = QPicPlace.picPlace;
+        List<PicPlace> picPlaceList =
+                query.select(picPlace)
+                        .from(picPlace)
+                        .fetch();
+        return picPlaceList;
     }
 }
