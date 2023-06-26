@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static minipj.placepic_core.Entity.QPlace.place;
 
@@ -195,5 +194,40 @@ public class PlaceRepository {
         }else{
             return false;
         }
+    }
+
+    public List<PlaceForm> findPicPlaces(Long userId) {
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        QPlacePhoto placePhoto = QPlacePhoto.placePhoto;
+        QMenu menu = QMenu.menu;
+        QPicPlace picPlace = QPicPlace.picPlace;
+
+        List<PlaceForm> placeForms = new ArrayList<>();
+
+        //userId가 찜한 placeId list조회
+        List<Long> placeids = query
+                .select(picPlace.place.placeId)
+                .from(picPlace)
+                .where(picPlace.user.userId.eq(userId))
+                .fetch();
+        //placeid값으로 일치하는 place정보를 placeForm에 반환
+        for (Long placeid : placeids) {
+            Place pplace = em.find(Place.class, placeid);
+                PlaceForm placeForm = new PlaceForm();
+                Long id = pplace.getPlaceId();
+                List<MenuForm> menus = getMenus(query, menu, id);
+                List<String> placePhotos = getPlacePhotos(id, query,placePhoto);
+                settingPlace(id, placeForm, pplace, menus, placePhotos);
+                placeForms.add(placeForm);
+        }
+        return placeForms;
+    }
+
+    public void deletePlacePic(Long userId, Long placeId) {
+        em.createQuery("delete from PicPlace p where p.user.userId=:userid" +
+                        " and p.place.placeId=:placeId")
+                .setParameter("userid",userId)
+                .setParameter("placeId",placeId)
+                .executeUpdate();
     }
 }

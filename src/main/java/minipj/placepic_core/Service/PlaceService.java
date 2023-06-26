@@ -105,4 +105,14 @@ public class PlaceService {
         Optional<User> picuser = userRepository.findById(userId);
         return placeRepository.placePic(placeId,picuser.get());
     }
+
+    @Transactional
+    public void deletePlacePic(Long userId, Long placeId) {
+        placeRepository.deletePlacePic(userId,placeId);
+    }
+
+    public List<PlaceForm> findPicPlaces(Long userId) {
+        log.info("[placePic] 찜목록 조회");
+        return placeRepository.findPicPlaces(userId);
+    }
 }

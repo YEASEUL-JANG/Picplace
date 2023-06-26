@@ -105,5 +105,19 @@ public ApiResponse uploadImage(@RequestParam("menuImages") List<MultipartFile> m
         return ApiResponse.success(placepicId);
     }
 
+    @ApiOperation(value="찜목록",notes = "@PathVariable를 활용한 장소찜목록")
+    @PostMapping("/placePicList/{userId}")
+    public ApiResponse placePicList( @PathVariable Long userId){
+        logger.info("[place_pic] 장소찜목록 ,userId : {}", userId);
+        return ApiResponse.success(placeService.findPicPlaces(userId));
+    }
 
+    @ApiOperation(value="찜삭제",notes = "@PathVariable를 활용한 장소찜 삭제")
+    @PostMapping("/placePic/delete/{placeId}")
+    public ApiResponse placePicDelete( @PathVariable Long placeId,@RequestBody Map<String, Long> requestBody){
+        Long userId = requestBody.get("userId");
+        logger.info("[place_pic] 장소찜 삭제 ,userId : {}, placeId: {}", userId,placeId);
+        placeService.deletePlacePic(userId,placeId);
+        return ApiResponse.success();
+    }
 }
