@@ -33,16 +33,16 @@ public class RenewPicJob implements Job {
 
         for(PicPlace p : allPicPlaces){
             LocalDateTime picDate = p.getPicDate();
-//            long datsBetween = ChronoUnit.DAYS.between(picDate,now);
-//            if(datsBetween > 7){
-//                placeService.deletePlacePic(p.getUser().getUserId(),p.getPicplaceId());
-//            }
-            long secondsBetween = ChronoUnit.SECONDS.between(picDate, now);
-            log.info("[RenewPicJob Executed] 시간차 : {}",secondsBetween);
-            if (secondsBetween > 10) {
-                log.info("[RenewPicJob Executed] 만료된 placePic을 삭제합니다. placeid : {}, userId: {}",p.getPlace().getPlaceId(),p.getUser().getUserId());
+            long datsBetween = ChronoUnit.DAYS.between(picDate,now);
+            if(datsBetween > 7){
                 placeService.deletePlacePic(p.getUser().getUserId(),p.getPlace().getPlaceId());
             }
+            //long secondsBetween = ChronoUnit.SECONDS.between(picDate, now);
+            log.info("[RenewPicJob Executed] 시간차 : {}",datsBetween);
+//            if (secondsBetween > 10) {
+//                log.info("[RenewPicJob Executed] 만료된 placePic을 삭제합니다. placeid : {}, userId: {}",p.getPlace().getPlaceId(),p.getUser().getUserId());
+//                placeService.deletePlacePic(p.getUser().getUserId(),p.getPlace().getPlaceId());
+//            }
         }
     }
 

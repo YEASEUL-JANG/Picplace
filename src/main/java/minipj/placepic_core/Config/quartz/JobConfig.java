@@ -27,7 +27,7 @@ public class JobConfig {
         map.put("dateTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         try{//크론형식 지정 후 스케줄 시작
-            quartzHandler.addJob(RenewPicJob.class,"testName","test입니다",map,"0/10 * * * * ?");
+            quartzHandler.addJob(RenewPicJob.class,"PlcPlaceJob","오후 12시마다 7일 이상된 찜목록을 삭제함.",map,"0 0 12 * * ?");
         }catch (SchedulerException e){
             e.printStackTrace();
         }
