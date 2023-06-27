@@ -50,11 +50,7 @@ public class PlaceRepository {
                         menuTypeLike(placeSearch.getMenuType()))
                 .fetch();
         for(Place p : places){
-            PlaceForm placeForm = new PlaceForm();
-            Long id = p.getPlaceId();
-            List<MenuForm> menus = getMenus(query, menu, id);
-            List<String> placePhotos = getPlacePhotos(id, query,placePhoto);
-            settingPlace(id, placeForm, p, menus, placePhotos);
+            PlaceForm placeForm = new PlaceForm(p);
             placeForms.add(placeForm);
         }
         return placeForms;
@@ -97,58 +93,10 @@ public class PlaceRepository {
 
     public PlaceForm findAPlace(Long searchId) {
         JPAQueryFactory query = new JPAQueryFactory(em);
-        //placeForm 객체 준비
-        PlaceForm placeForm = new PlaceForm();
-        //id에 해당되는 place정보
         Place place = em.find(Place.class, searchId);
-        //Q테이블 준비
-        QMenu menu = QMenu.menu;
-        QPlacePhoto placePhoto = QPlacePhoto.placePhoto;
-        //id에 해당되는 메뉴들
-        List<MenuForm> menus = getMenus(query, menu, searchId);
-        //id에 해당되는 장소사진
-        List<String> placePhotos = getPlacePhotos(searchId, query, placePhoto);
-        //setting
-        settingPlace(searchId, placeForm, place, menus, placePhotos);
+        PlaceForm placeForm = new PlaceForm(place);
         return placeForm;
 
-    }
-
-    private static void settingPlace(Long searchId, PlaceForm placeForm, Place place, List<MenuForm> menus, List<String> placePhotos) {
-        placeForm.setPlaceId(searchId);
-        placeForm.setName(place.getPlaceName());
-        placeForm.setStartTime(place.getStartTime());
-        placeForm.setEndTime(place.getEndTime());
-        placeForm.setContent(place.getContent());
-        placeForm.setPlaceType(place.getPlaceType());
-        placeForm.setMenuType(place.getMenuType());
-        placeForm.setAddress(place.getAddress().getAddress());
-        placeForm.setLat(place.getLat());
-        placeForm.setLng(place.getLng());
-        placeForm.setDetailAddress(place.getAddress().getDetailAddress());
-        placeForm.setZipcode(place.getAddress().getZipcode());
-        placeForm.setMenuList(menus);
-        placeForm.setPlacePhotos(placePhotos);
-    }
-
-    private static List<MenuForm> getMenus(JPAQueryFactory query, QMenu menu, Long id) {
-        List<MenuForm> menus = query
-                .select(Projections.bean(MenuForm.class,
-                        menu.menuName,
-                        menu.menuImage,
-                        menu.price))
-                .from(menu)
-                .where(QMenu.menu.place.placeId.eq(id))
-                .fetch();
-        return menus;
-    }
-    private static List<String> getPlacePhotos(Long searchId, JPAQueryFactory query, QPlacePhoto placePhoto) {
-        List<String> placePhotos = query
-                .select(placePhoto.placeImage)
-                .from(placePhoto)
-                .where(QPlacePhoto.placePhoto.place.placeId.eq(searchId))
-                .fetch();
-        return placePhotos;
     }
 
     public void deletePlace(Long id) {
@@ -216,11 +164,7 @@ public class PlaceRepository {
         //placeid값으로 일치하는 place정보를 placeForm에 반환
         for (Long placeid : placeids) {
             Place pplace = em.find(Place.class, placeid);
-                PlaceForm placeForm = new PlaceForm();
-                Long id = pplace.getPlaceId();
-                List<MenuForm> menus = getMenus(query, menu, id);
-                List<String> placePhotos = getPlacePhotos(id, query,placePhoto);
-                settingPlace(id, placeForm, pplace, menus, placePhotos);
+                PlaceForm placeForm = new PlaceForm(pplace);
                 placeForms.add(placeForm);
         }
         return placeForms;

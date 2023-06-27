@@ -3,6 +3,7 @@ package minipj.placepic_core.Controller;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import minipj.placepic_core.Entity.Menu;
 import minipj.placepic_core.Entity.Place;
 
 import javax.persistence.Column;
@@ -18,7 +19,10 @@ public class MenuForm {
     private int price;
     private String menuImage;
 
-    public MenuForm() {
+    public MenuForm(Menu menu) {
+        menuName = menu.getMenuName();
+        price = menu.getPrice();
+        menuImage = menu.getMenuImage();
     }
 
     public MenuForm(String menuName, int price, String menuImage) {

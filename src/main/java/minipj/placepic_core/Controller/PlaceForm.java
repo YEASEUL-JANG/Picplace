@@ -5,9 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 import minipj.placepic_core.Entity.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter@Setter@ToString
 public class PlaceForm {
@@ -29,4 +29,26 @@ public class PlaceForm {
 
     private List<MenuForm> menuList = new ArrayList<>(); //메뉴리스트
     private List<String> placePhotos= new ArrayList<>(); //가게사진
+
+
+    public PlaceForm(Place place){
+       placeId = place.getPlaceId();
+       name = place.getPlaceName();
+       startTime = place.getStartTime();
+       endTime = place.getEndTime();
+       content = place.getContent();
+       placeType = place.getPlaceType();
+       menuType = place.getMenuType();
+       lat = place.getLat();
+       lng = place.getLng();
+       address = place.getAddress().getAddress();
+       detailAddress = place.getAddress().getDetailAddress();
+       zipcode = place.getAddress().getZipcode();
+       menuList = place.getMenuList().stream()
+               .map(p -> new MenuForm(p))
+               .collect(Collectors.toList());
+        placePhotos = place.getPlacePhotos().stream()
+                .map(p ->  p.getPlaceImage())
+                .collect(Collectors.toList());
+   }
 }
