@@ -31,6 +31,9 @@ public class PlaceForm {
     private List<String> placePhotos= new ArrayList<>(); //가게사진
 
 
+    public PlaceForm() {
+    }
+
     public PlaceForm(Place place){
        placeId = place.getPlaceId();
        name = place.getPlaceName();

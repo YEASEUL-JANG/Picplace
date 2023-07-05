@@ -126,4 +126,14 @@ public class PlaceService {
         log.info("[placePic] 찜목록 전체조회");
         return placeRepository.findAllPicPlaces();
     }
+
+    @Transactional
+    public void deleteMenu(Long placeId) {
+       placeRepository.deleteMenu(placeId);
+    }
+
+    @Transactional
+    public void deletePlacePhoto(Long placeId) {
+        placeRepository.deletePlacePhoto(placeId);
+    }
 }

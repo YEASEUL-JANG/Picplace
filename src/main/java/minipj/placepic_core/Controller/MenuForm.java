@@ -25,9 +25,6 @@ public class MenuForm {
         menuImage = menu.getMenuImage();
     }
 
-    public MenuForm(String menuName, int price, String menuImage) {
-        this.menuName = menuName;
-        this.price = price;
-        this.menuImage = menuImage;
+    public MenuForm() {
     }
 }

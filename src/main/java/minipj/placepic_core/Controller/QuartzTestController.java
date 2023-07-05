@@ -22,17 +22,17 @@ public class QuartzTestController {
 
     private final QuartzHandler quartzHandler;
 
-    @GetMapping("/add")
-    public ApiResponse add(@RequestParam(value="name")String name) throws SchedulerException {
-        Map map = new HashMap<>();
-        map.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-        quartzHandler.addJob(RenewPicJob.class,name,"test입니다",map,"0/10 * * * * ?");
-        return ApiResponse.success();
-    }
-    @GetMapping("/dlt")
-    public ApiResponse delete(@RequestParam(value = "name") String name) throws SchedulerException {
-        quartzHandler.deleteJob(name);
-        return ApiResponse.success();
-    }
+//    @GetMapping("/add")
+//    public ApiResponse add(@RequestParam(value="name")String name) throws SchedulerException {
+//        Map map = new HashMap<>();
+//        map.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//
+//        quartzHandler.addJob(RenewPicJob.class,name,"test입니다",map,"0/10 * * * * ?");
+//        return ApiResponse.success();
+//    }
+//    @GetMapping("/dlt")
+//    public ApiResponse delete(@RequestParam(value = "name") String name) throws SchedulerException {
+//        quartzHandler.deleteJob(name);
+//        return ApiResponse.success();
+//    }
 }

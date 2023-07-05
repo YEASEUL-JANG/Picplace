@@ -35,8 +35,6 @@ public class PlaceRepository {
     public List<PlaceForm> findPlaces(PlaceSearch placeSearch){
         JPAQueryFactory query = new JPAQueryFactory(em);
         QPlace place = QPlace.place;
-        QPlacePhoto placePhoto = QPlacePhoto.placePhoto;
-        QMenu menu = QMenu.menu;
 
         List<PlaceForm> placeForms = new ArrayList<>();
 
@@ -48,6 +46,8 @@ public class PlaceRepository {
                         menuLike(placeSearch.getMenuKeyword()),
                         placeTypeLike(placeSearch.getPlaceType()),
                         menuTypeLike(placeSearch.getMenuType()))
+                .offset((placeSearch.getPageNum() -1) * 9)
+                .limit(9)
                 .fetch();
         for(Place p : places){
             PlaceForm placeForm = new PlaceForm(p);
@@ -100,8 +100,8 @@ public class PlaceRepository {
     }
 
     public void deletePlace(Long id) {
-        em.createQuery("delete from User u where u.userId=:userid")
-                .setParameter("userid",id)
+        em.createQuery("delete from Place p where p.placeId=:placeId")
+                .setParameter("placeId",id)
                 .executeUpdate();
     }
 
@@ -149,8 +149,6 @@ public class PlaceRepository {
 
     public List<PlaceForm> findPicPlaces(Long userId) {
         JPAQueryFactory query = new JPAQueryFactory(em);
-        QPlacePhoto placePhoto = QPlacePhoto.placePhoto;
-        QMenu menu = QMenu.menu;
         QPicPlace picPlace = QPicPlace.picPlace;
 
         List<PlaceForm> placeForms = new ArrayList<>();
@@ -187,5 +185,19 @@ public class PlaceRepository {
                         .from(picPlace)
                         .fetch();
         return picPlaceList;
+    }
+
+    public void deleteMenu(Long placeId) {
+        int result = em.createQuery("delete from Menu m where m.place.placeId=:placeId")
+                .setParameter("placeId",placeId)
+                .executeUpdate();
+        log.info("삭제된 메뉴 수 : {}",result);
+    }
+
+    public void deletePlacePhoto(Long placeId) {
+        int result = em.createQuery("delete from PlacePhoto p where p.place.placeId=:placeId")
+                .setParameter("placeId",placeId)
+                .executeUpdate();
+        log.info("삭제된 포토 수 : {}",result);
     }
 }

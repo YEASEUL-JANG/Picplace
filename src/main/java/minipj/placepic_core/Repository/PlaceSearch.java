@@ -13,4 +13,5 @@ public class PlaceSearch {
     private String address; //주소검색
     private String placeType; //장소카테고리
     private String menuType; //메뉴카테고리
+    private long pageNum;//요청페이지
 }

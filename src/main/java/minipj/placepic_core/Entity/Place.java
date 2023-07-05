@@ -45,15 +45,15 @@ public class Place {
 
     //CascadeType.ALL : place를 persist 하면 menuList도 모두 persist되게한다.
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL) //메뉴리스트
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true) //메뉴리스트
     private List<Menu> menuList = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PicPlace> picPlaces= new ArrayList<>(); //찜테이블 객체
 
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlacePhoto> placePhotos= new ArrayList<>();
 
     //연관관계 편의 메서드

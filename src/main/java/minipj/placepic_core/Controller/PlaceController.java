@@ -72,16 +72,23 @@ public ApiResponse uploadImage(@RequestParam("menuImages") List<MultipartFile> m
         return ApiResponse.success(placeService.findPlaces(placeSearch));
     }
 
-    @ApiOperation(value="상세장소",notes = "@RequestBody를 활용한 장소등록 Get Method")
+    @ApiOperation(value="상세장소",notes = "@RequestBody를 활용한 장소조회 Get Method")
     @GetMapping("/placedetail/{placeId}")
     public ApiResponse placeList(@PathVariable Long placeId){
         logger.info("[placelist] 장소 상세 조회");
         return ApiResponse.success(placeService.findAPlace(placeId));
     }
 
-    @ApiOperation(value="장소삭제",notes = "@RequestBody를 활용한 장소등록 Get Method")
+    @ApiOperation(value="장소삭제",notes = "@RequestBody를 활용한 장소삭제 Get Method")
     @PostMapping("/placedelete/{placeId}")
-    public ApiResponse placeDelete(@PathVariable Long placeId){
+    public ApiResponse placeDelete(@PathVariable Long placeId,@RequestBody Map<String, Long> requestBody){
+        logger.info("[placelist] 장소 삭제 전 placephoto 삭제진행");
+        Long userId = requestBody.get("userId");
+        placeService.deletePlacePic(userId,placeId);
+        logger.info("[placelist] 장소 삭제 전 menu 삭제진행");
+        placeService.deleteMenu(placeId);
+        logger.info("[placelist] 장소 삭제 전 placePhoto 삭제진행");
+        placeService.deletePlacePhoto(placeId);
         logger.info("[placelist] 장소 삭제 진행");
         placeService.deletePlace(placeId);
         return ApiResponse.success();
@@ -89,8 +96,7 @@ public ApiResponse uploadImage(@RequestParam("menuImages") List<MultipartFile> m
 
     @ApiOperation(value="장소수정",notes = "@PathVariable를 활용한 장소수정 Post Method")
     @PutMapping("/placeEdit/{placeId}")
-    public ApiResponse placeEdit(@RequestBody PlaceForm form,
-                                       @PathVariable Long placeId){
+    public ApiResponse placeEdit(@RequestBody PlaceForm form){
         logger.info("[add_place] 장소수정 진행, placeForm : {}",form.toString());
         Long editplaceId = placeService.editPlace(form);
         return ApiResponse.success(editplaceId);
