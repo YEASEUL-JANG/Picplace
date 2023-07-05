@@ -67,7 +67,8 @@ export default {
             menuKeyword: '',
             address: '',
             placeType: '',
-            menuType:''
+            menuType:'',
+            pageNum: 1
         })
         const keyword = ref("")
         const category = ref("")

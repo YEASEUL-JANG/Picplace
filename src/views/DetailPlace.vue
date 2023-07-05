@@ -2,6 +2,15 @@
     <div class="container px-4 px-lg-5">
         <!-- Heading Row-->
         <div class="row gx-4 gx-lg-5 align-items-center my-3">
+
+            <el-row justify="space-between" >
+                <el-col :span="2">
+                    <el-button size=large  type="success" class="m-3" @click="goList">목록</el-button>
+                </el-col>
+                <el-col :span="2">
+                    <el-button size=large :icon="Star" type="warning" class="m-3" @click.stop="addPicplace(place.placeId)">찜</el-button>
+                </el-col>
+            </el-row>
             <div class="col-lg-7">
 <!--                매장사진-->
                 <el-carousel indicator-position="outside" trigger="click" >
@@ -49,14 +58,7 @@
             </el-descriptions-item>
         </el-descriptions>
 
-        <el-row justify="space-between" >
-            <el-col :span="2">
-                <el-button size=large  type="success" class="m-3" @click="goList">목록</el-button>
-            </el-col>
-            <el-col :span="2">
-                <el-button size=large :icon="Star" type="warning" class="m-3" @click.stop="addPicplace(place.placeId)">찜</el-button>
-            </el-col>
-        </el-row>
+
 <!--메뉴 carousel-->
             <div class="row gx-4 gx-lg-5 my-5">
                 <div class="col-lg-7">
@@ -72,10 +74,11 @@
                         <img :src="require('../../public/upload/'+menu.menuImage)" style="width: 100%; height: auto;" />
 <!--                    </template>-->
                 </el-carousel-item>
-            </el-carousel>
+               </el-carousel>
                 </div>
 
             </div>
+
      </div>
     </div>
 </template>

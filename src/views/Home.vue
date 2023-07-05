@@ -1,160 +1,182 @@
 <template>
   <!-- Page header with logo and tagline-->
-    <header class="py-5 bg-light border-bottom mb-4">
-        <div class="container">
-            <div class="text-center my-5">
+    <header class="py-5 border-bottom mb-4" id="mainImage">
+            <div class="text-center my-5" >
                 <h1 class="fw-bolder">Let's Pick your Place !</h1>
-                <p class="lead mb-0">내 주변 맛집과 카페를 찜해보세요!</p>
+                <p class="lead mb-0">사당의 맛집과 카페를 찜해보세요!</p>
+
             </div>
-        </div>
     </header>
   <!-- Page content-->
     <div class="container">
-        <div class="row">
             <!-- Blog entries-->
-            <div class="col-lg-8">
-                <!-- Featured blog post-->
-                <div class="card mb-4">
-                    <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                    <div class="card-body">
-                        <div class="small text-muted">January 1, 2023</div>
-                        <h2 class="card-title">Featured Post Title</h2>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-                        <a class="btn btn-primary" href="#!">Read more →</a>
-                    </div>
-                </div>
-                <!-- Nested row for non-featured blog posts-->
-                <div class="row">
-                    <div class="col-lg-6">
-                        <!-- Blog post-->
-                        <div class="card mb-4">
-                            <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                            <div class="card-body">
-                                <div class="small text-muted">January 1, 2023</div>
-                                <h2 class="card-title h4">Post Title</h2>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                <a class="btn btn-primary" href="#!">Read more →</a>
-                            </div>
-                        </div>
-                        <!-- Blog post-->
-                        <div class="card mb-4">
-                            <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                            <div class="card-body">
-                                <div class="small text-muted">January 1, 2023</div>
-                                <h2 class="card-title h4">Post Title</h2>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                <a class="btn btn-primary" href="#!">Read more →</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <!-- Blog post-->
-                        <div class="card mb-4">
-                            <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                            <div class="card-body">
-                                <div class="small text-muted">January 1, 2023</div>
-                                <h2 class="card-title h4">Post Title</h2>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                <a class="btn btn-primary" href="#!">Read more →</a>
-                            </div>
-                        </div>
-                        <!-- Blog post-->
-                        <div class="card mb-4">
-                            <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                            <div class="card-body">
-                                <div class="small text-muted">January 1, 2023</div>
-                                <h2 class="card-title h4">Post Title</h2>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam.</p>
-                                <a class="btn btn-primary" href="#!">Read more →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Pagination-->
-                <nav aria-label="Pagination">
-                    <hr class="my-0" />
-                    <ul class="pagination justify-content-center my-4">
-                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                        <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">Older</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <!-- Side widgets-->
-            <div class="col-lg-4">
-                <!-- Search widget-->
-                <el-input
-                    v-model="searching"
-                    placeholder="Please input"
-                    class="input-with-select mb-4"
+                <div class="mb-5 mt-3">
+            <h4>카페 Best</h4>
+            <!-- place 목록-->
+                <el-row  gutter=16>
+                <el-col
+                    v-for="(place,index) in cafes"
+                    :key="index"
+                    :span="8"
+                    class="el-col"
                 >
-                    <template #prepend>
-                        <el-select v-model="select" placeholder="Select" style="width: 115px">
-                            <el-option label="Restaurant" value="1" />
-                            <el-option label="Order No." value="2" />
-                            <el-option label="Tel" value="3" />
-                        </el-select>
-                    </template>
-                    <template #append>
-                        <el-button :icon="Search" />
-                    </template>
-                </el-input>
-
-                <!-- Categories widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Categories</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">Web Design</a></li>
-                                    <li><a href="#!">HTML</a></li>
-                                    <li><a href="#!">Freebies</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">JavaScript</a></li>
-                                    <li><a href="#!">CSS</a></li>
-                                    <li><a href="#!">Tutorials</a></li>
-                                </ul>
+                    <el-card :body-style="{ padding: '0px', cursor:'pointer' }"
+                             shadow="hover"
+                             @click="placeDetail(place.placeId)">
+                        <img :src="'./upload/'+place.placePhotos[0]"
+                             class="image" style="width:100%;height:350px;"
+                        />
+                        <div style="padding: 10px">
+                            <span>{{ place.name }}</span>
+                            <el-tag class="ms-2" type="warning">{{getMenuType(place.menuType)}}</el-tag>
+                            <div class="bottom">
+                                <time class="time">{{ place.address }}</time>
+                                <el-button
+                                    :icon="Star" type="warning"  @click.stop="addPicplace(place.placeId)" class="ms-1">찜</el-button>
                             </div>
                         </div>
-                    </div>
+                    </el-card>
+                </el-col>
+                </el-row>
                 </div>
-                <!-- Side widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Side Widget</div>
-                    <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+                <div class="mb-5">
+            <h4>식당 Best</h4>
+            <!-- place 목록-->
+                <el-row  gutter=16>
+                <el-col
+                v-for="(res,index) in places"
+                :key="index"
+                :span="8"
+                class="el-col"
+                >
+                <el-card :body-style="{ padding: '0px', cursor:'pointer' }"
+                         shadow="hover"
+                         @click="placeDetail(res.placeId)">
+                    <img :src="'./upload/'+res.placePhotos[0]"
+                         class="image" style="width:100%;height:350px;"
+                    />
+                    <div style="padding: 10px">
+                        <span>{{ res.name }}</span>
+                        <el-tag class="ms-2" type="warning">{{getMenuType(res.menuType)}}</el-tag>
+                        <div class="bottom">
+                            <time class="time">{{ res.address }}</time>
+                            <el-button :icon="Star" type="warning"  @click.stop="addPicplace(res.placeId)" class="ms-1">찜</el-button>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-col>
+                </el-row>
                 </div>
             </div>
-        </div>
-    </div>
-  <!-- Footer-->
-    <footer class="py-5 bg-dark">
-        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
-    </footer>
+
 </template>
 <script>
 
-import {ref} from "vue";
-import {Search} from "@element-plus/icons-vue";
+import {computed, onMounted, ref} from "vue";
+import {Search, Star} from "@element-plus/icons-vue";
+import axios from "@/common/axios";
+import {useToast} from "@/common/toast";
+import store from "@/store";
+import {useRouter} from "vue-router";
+import menuTypes from "@/model/menuType";
 export default {
     computed: {
+        Star() {
+            return Star
+        },
         Search() {
             return Search
         }
     },
     setup(){
-        const searching = ref('');
-        const select = ref('');
+        const loading = ref(false);
+        const currentUser = computed(() => store.getters["getcurrentUser"]);
+        const router = useRouter();
+        const places = ref([]);
+        const {triggerToast} = useToast();
+        const cafes = ref([]);
+        const searchthing = ref({
+            placeName: '',
+            menuKeyword: '',
+            address: '',
+            placeType: '',
+            menuType:'',
+            pageNum: 1
+        })
+        onMounted(() => {
+            getMainPlace();
+        })
+
+        const getMainPlace =async () => {
+            loading.value = true;
+            try {
+                const res = await axios.post('api/place/placelist',  searchthing.value);
+                console.log("##placeList",res.data.data)
+                for(const place of res.data.data){
+                    if(place.placeType == "CAFE"){
+                        if(cafes.value.length >= 6){
+                            continue;
+                        }
+                        cafes.value.push(place)
+                    }else{
+                        if(places.value.length >= 6){
+                            continue;
+                        }
+                        places.value.push(place)
+                    }
+                }
+                console.log("##cafes",cafes.value)
+                console.log("##restaurant",places.value)
+
+                loading.value = false;
+
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        const addPicplace = async (placeId) => {
+            try {
+                const userid = currentUser.value.userId;
+                console.log("유저아이디 : " + userid + " place아이디 : " + placeId);
+                const res = await axios.post("api/place/placePic/" + placeId, {
+                    userId: userid
+                });
+                console.log("찜데이터",res.data)
+                if (res.data.code == 200) {
+                    triggerToast("찜목록에 추가되었습니다.");
+                }
+            } catch (err) {
+                if (err?.response?.status === 409) {
+                    triggerToast("이미 찜한 장소입니다.", "danger");
+                } else {
+                    triggerToast("Unexpected error occurred", "danger");
+                }
+                console.log(err);
+            }
+        }
+        const placeDetail =(placeId) => {
+            router.push("/detailPlace/"+placeId);
+        }
+        const getMenuType = (mtype) => {
+            switch (mtype){
+                case menuTypes.KOREAN.text:  return menuTypes.KOREAN.label;
+                case menuTypes.WESTERN.text: return menuTypes.WESTERN.label;
+                case menuTypes.JAPANESE.text: return menuTypes.JAPANESE.label;
+                case menuTypes.CHINESE.text: return menuTypes.CHINESE.label;
+                default: return menuTypes.ETC.label;
+            }
+        }
+
+
         return{
-            searching,
-            select,
+            getMainPlace,
+            addPicplace,
+            placeDetail,
+            places,
+            cafes,
+            getMenuType
+
 
 
         }
@@ -162,8 +184,19 @@ export default {
 
 }
 </script>
-<style >
-.input-with-select .el-input-group__prepend {
-    background-color: var(--el-fill-color-blank);
+<style scoped>
+#mainImage{
+    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ),url("/public/upload/main.jpg");
+
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+.bottom {
+    margin-top: 13px;
+    line-height: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

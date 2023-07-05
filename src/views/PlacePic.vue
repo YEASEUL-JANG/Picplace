@@ -1,9 +1,11 @@
 <template>
     <section class="border-bottom" id="features">
-        <div  class="container  my-3">
+        <div v-if="places.length>0" class="container  my-3">
             <div class="row my-2">
                 <div class="col-lg-6">
-                <PlaceMap @onSearch="picplace"
+                <PlaceMap
+                    v-if="places.length>0"
+                    @onSearch="picplace"
                           :height="mapsize"/>
                 </div>
 
@@ -27,7 +29,7 @@
                             <el-tag class="ms-2" type="warning">{{getMenuType(place.menuType)}}</el-tag>
                             <div class="bottom">
                                 <time class="time">{{ place.address }}</time>
-                                <el-button :icon="Star" type="warning"  @click.stop="deletePic(place.placeId)" class="ms-1">삭제</el-button>
+                                <el-button :icon="Star" type="danger"  @click.stop="deletePic(place.placeId)" class="ms-1">삭제</el-button>
                             </div>
                         </div>
                     </el-card>
@@ -36,14 +38,14 @@
             </div>
             </div>
         </div>
-        <div  v-if="places.length == 0" class="container  my-3">
+        <div v-else  class="container  my-3">
             찜한 장소가 없습니다.
         </div>
     </section>
 </template>
 
 <script>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import { Star} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import axios from "@/common/axios";
@@ -83,6 +85,9 @@ export default {
                 console.log(err);
             }
         }
+        onMounted(() => {
+            picplace();
+        });
 
         const readyMap = () => {
             if (places.value.length === 0) {

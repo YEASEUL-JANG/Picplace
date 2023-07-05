@@ -1,9 +1,9 @@
-FROM node:lts-alpine3.16 as build-stage
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --force
-COPY . .
-RUN npm run build
+#FROM node:lts-alpine3.16 as build-stage
+#WORKDIR /app
+#COPY package*.json ./
+#RUN npm install --force
+#COPY . .
+#RUN npm run build
 
 # production stage
 FROM nginx:1.23.1 as production-stage

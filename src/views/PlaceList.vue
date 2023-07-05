@@ -66,6 +66,9 @@
                 </el-col>
             </el-row>
         </div>
+        <div style="display: flex; justify-content: center; width: 100%;" class="my-5" >
+            <el-pagination background layout="prev, pager, next"  @current-change="handlePageChange" :total="50" />
+        </div>
     </section>
 </template>
 
@@ -97,20 +100,21 @@ export default {
         const positions = ref([]);
         const mapsize = ref(350);
         const map = ref(null);
-        const searchPlace = async (searchthing) => {
-            if(searchthing == null){
-                searchthing = ({
-                    placeName: '',
-                    menuKeyword: '',
-                    address: '',
-                    placeType: '',
-                    menuType:''
-                })
-            }
+        const searchthing = ref({
+            placeName: '',
+            menuKeyword: '',
+            address: '',
+            placeType: '',
+            menuType:'',
+            pageNum: 1
+        })
+        const searchPlace = async (placeSearch) => {
+            if (placeSearch)
+                searchthing.value = placeSearch
             loading.value = true;
             positions.value = []
             try {
-                const res = await axios.post('api/place/placelist', searchthing);
+                const res = await axios.post('api/place/placelist', searchthing.value);
                 console.log("##placeList",res.data)
                 places.value = res.data.data
                 loading.value = false;
@@ -197,6 +201,11 @@ export default {
         const placeDetail =(placeId) => {
             router.push("/detailPlace/"+placeId);
         }
+        const handlePageChange = (number) => {
+            console.log(number)
+            searchthing.value.pageNum = number;
+            searchPlace();
+        }
         return{
             searchPlace,
             places,
@@ -205,7 +214,8 @@ export default {
             getMenuType,
             positions,
             mapsize,
-            addPicplace
+            addPicplace,
+            handlePageChange
         }
     }
 }
@@ -230,13 +240,6 @@ export default {
     align-items: center;
 }
 
-.button {
-    padding: 0;
-    min-height: auto;
-}
-.searchBox{
-    width: 100%;
-}
 .image {
     width: 100%;
     display: block;

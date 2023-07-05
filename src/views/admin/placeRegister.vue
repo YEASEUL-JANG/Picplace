@@ -106,8 +106,6 @@
         </div>
     </div>
 
-    {{placeform}}
-    {{rawPlacePhotos}}
 </template>
 
 <script>
