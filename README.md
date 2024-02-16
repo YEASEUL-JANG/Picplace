@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/YEASEUL-JANG/Picplace">
-    <img src="picplace_front/src/assets/picplacelogo.jpg" alt="Logo" width="240" height="80">
+    <img src="picplace_front/src/assets/picplacelogo.jpg" alt="Logo" width="400" height="80">
   </a>
 
   <h3 align="center">PicPlace</h3>
