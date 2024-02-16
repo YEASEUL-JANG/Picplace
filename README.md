@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/YEASEUL-JANG/Picplace">
-    <img src="picplace_front/src/assets/picplacelogo.png" alt="Logo" width="240" height="80">
+    <img src="picplace_front/src/assets/picplacelogo.jpg" alt="Logo" width="240" height="80">
   </a>
 
   <h3 align="center">PicPlace</h3>
@@ -39,7 +39,7 @@
 💡 'PicPlace' 는 사당역 근처의 맛집들을 소개하는 서비스입니다.
 </p>
 
-<img src="picplace_front/src/assets/mainpage.png" alt="MainPage"
+<img src="picplace_front/src/assets/mainpage.PNG" alt="MainPage"
   width="500" height="400">
 <br>
 <p>
