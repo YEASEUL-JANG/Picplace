@@ -29,7 +29,7 @@ public class AuthenticationController {
     @ApiOperation(value="회원가입",notes = "@RequestBody를 활용한 회원가입 Post Method")
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@ApiParam(value = "User object") @RequestBody JoinForm user){
-        logger.info("[sign-up] 회원가입 진행, joinuser : {}",user.toString());
+        logger.info("[sign-up] 회원가입 진행, joinuser : {}",user.getUsername());
         logger.info("[sign-up] 아이디 중복확인");
         if(userService.findByUsername(user.getUsername()).isPresent()){
             logger.info("[sign-up] 아이디 중복에러");

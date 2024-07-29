@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -29,11 +30,16 @@ public class UserService {
         logger.info("[saveUser] 유저객체 생성");
         User user = new User();
         logger.info("[saveUser] joinform 정보 저장");
-        Address address = new Address(joinuser.getAddress(), joinuser.getDetailAddress(), joinuser.getZipcode());
+        String safeUsername = HtmlUtils.htmlEscape(joinuser.getUsername());
+        String safePassword = HtmlUtils.htmlEscape(joinuser.getPassword());
+
+        Address address = new Address(HtmlUtils.htmlEscape(joinuser.getAddress()),
+                HtmlUtils.htmlEscape(joinuser.getDetailAddress()),
+                HtmlUtils.htmlEscape(joinuser.getZipcode()));
         user.setAddress(address);
-        user.setUsername(joinuser.getUsername());
+        user.setUsername(safeUsername);
         logger.info("[saveUser] 비밀번호 암호화 진행");
-        user.setPassword(passwordEncoder.encode(joinuser.getPassword()));
+        user.setPassword(passwordEncoder.encode(safePassword));
         logger.info("[saveUser] role 저장");
         if(joinuser.getUsername().equals("admin")){
             user.setRole(Role.ADMIN);
@@ -67,8 +73,11 @@ public class UserService {
         logger.info("[findUser] 유저 정보수정 진행");
         Optional<User> finduser = userRepository.findById(userId);
         User user = finduser.get();
-        user.setUsername(userDto.getUsername());
-        Address newaddress = new Address(userDto.getAddress(), userDto.getDetailAddress(),userDto.getZipcode() );
+        String safeUsername = HtmlUtils.htmlEscape(userDto.getUsername());
+        user.setUsername(safeUsername);
+        Address newaddress = new Address(HtmlUtils.htmlEscape(userDto.getAddress()),
+                HtmlUtils.htmlEscape(userDto.getDetailAddress()),
+                HtmlUtils.htmlEscape(userDto.getZipcode()) );
         user.setAddress(newaddress);
     }
 }

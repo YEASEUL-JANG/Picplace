@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.HtmlUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,14 +37,22 @@ public class PlaceService {
 
     @Transactional //commit을 하면서 영속성
     public Long createPlace(PlaceForm form) {
-        log.info("[createPlace] place 등록시작");
+        //XSS 방지 : 입력 데이터 필터링
+        String safeName = HtmlUtils.htmlEscape(form.getName());
+        String safeContent = HtmlUtils.htmlEscape(form.getContent());
+
+        // Address 객체 생성
         log.info("[createPlace] Address객체 생성 ");
-        Address address = new Address(form.getAddress(),form.getDetailAddress(), form.getZipcode());
+        Address address = new Address(HtmlUtils.htmlEscape(form.getAddress()),
+                HtmlUtils.htmlEscape(form.getDetailAddress()),
+                HtmlUtils.htmlEscape(form.getZipcode()));
+
+        log.info("[createPlace] place 등록시작");
         log.info("[createPlace] Place 객체에 정보 저장");
-        Place place = Place.createPlace(form.getName(), form.getStartTime(),
-                form.getEndTime(), form.getContent(),
-                address,form.getLat(),form.getLng(), form.getPlaceType(),form.getMenuType(),
-                 form.getPlacePhotos(), form.getMenuList());
+        Place place = Place.createPlace(safeName, form.getStartTime(),
+                form.getEndTime(), safeContent,
+                address, form.getLat(), form.getLng(), form.getPlaceType(), form.getMenuType(),
+                form.getPlacePhotos(), form.getMenuList());
         log.info("[createPlace] place 등록 진행");
         Long placeId = placeRepository.save(place);
         log.info("[createPlace] place 등록 완료");
