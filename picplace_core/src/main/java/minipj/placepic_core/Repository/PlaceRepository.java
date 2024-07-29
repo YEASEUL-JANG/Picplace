@@ -6,9 +6,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import minipj.placepic_core.Controller.MenuForm;
-import minipj.placepic_core.Controller.PlaceForm;
 import minipj.placepic_core.Entity.*;
+import minipj.placepic_core.Entity.Form.MenuForm;
+import minipj.placepic_core.Entity.Form.PlaceForm;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

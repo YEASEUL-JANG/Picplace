@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import minipj.placepic_core.Entity.Form.JoinForm;
 import minipj.placepic_core.Entity.User;
 import minipj.placepic_core.Service.AuthenticationService;
 import minipj.placepic_core.Service.UserService;

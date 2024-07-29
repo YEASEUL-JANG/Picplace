@@ -2,9 +2,9 @@ package minipj.placepic_core.Controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import minipj.placepic_core.Entity.UserDto;
 import minipj.placepic_core.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import minipj.placepic_core.Service.AuthenticationService;
 import minipj.placepic_core.Service.UserService;
 import org.springframework.web.bind.annotation.*;
 

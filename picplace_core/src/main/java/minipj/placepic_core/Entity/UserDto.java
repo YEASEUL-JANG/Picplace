@@ -1,4 +1,4 @@
-package minipj.placepic_core.Controller;
+package minipj.placepic_core.Entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

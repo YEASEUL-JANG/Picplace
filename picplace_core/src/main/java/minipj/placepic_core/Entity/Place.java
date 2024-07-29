@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import minipj.placepic_core.Controller.MenuForm;
+import minipj.placepic_core.Entity.Form.MenuForm;
 import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;

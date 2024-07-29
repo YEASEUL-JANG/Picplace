@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import minipj.placepic_core.Controller.JoinForm;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

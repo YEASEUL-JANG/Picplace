@@ -1,11 +1,11 @@
 package minipj.placepic_core.Service;
 
 import lombok.RequiredArgsConstructor;
-import minipj.placepic_core.Controller.JoinForm;
-import minipj.placepic_core.Controller.UserDto;
 import minipj.placepic_core.Entity.Address;
+import minipj.placepic_core.Entity.Form.JoinForm;
 import minipj.placepic_core.Entity.Role;
 import minipj.placepic_core.Entity.User;
+import minipj.placepic_core.Entity.UserDto;
 import minipj.placepic_core.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

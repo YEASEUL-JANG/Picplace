@@ -2,8 +2,8 @@ package minipj.placepic_core.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import minipj.placepic_core.Controller.PlaceForm;
 import minipj.placepic_core.Entity.Address;
+import minipj.placepic_core.Entity.Form.PlaceForm;
 import minipj.placepic_core.Entity.PicPlace;
 import minipj.placepic_core.Entity.Place;
 import minipj.placepic_core.Entity.User;

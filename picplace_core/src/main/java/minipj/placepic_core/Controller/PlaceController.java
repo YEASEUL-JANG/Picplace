@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import minipj.placepic_core.Entity.*;
-import minipj.placepic_core.Repository.PlaceRepository;
+import minipj.placepic_core.Entity.Form.PlaceForm;
 import minipj.placepic_core.Repository.PlaceSearch;
 import minipj.placepic_core.Service.AuthenticationService;
 import minipj.placepic_core.Service.PlaceService;
@@ -13,8 +13,6 @@ import minipj.placepic_core.response.ErrorCode;
 import minipj.placepic_core.response.GeneralException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

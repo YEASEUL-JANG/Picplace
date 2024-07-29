@@ -1,4 +1,4 @@
-package minipj.placepic_core.Controller;
+package minipj.placepic_core.Entity.Form;
 
 import lombok.Getter;
 import lombok.Setter;
