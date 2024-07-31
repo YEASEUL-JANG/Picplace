@@ -42,22 +42,44 @@ public class PlaceController {
 @PostMapping("/uploadImage")
 public ApiResponse uploadImage(@RequestParam("menuImages") List<MultipartFile> menuImages,
                                @RequestParam("placeImages")List<MultipartFile> placeImages) throws IOException {
+    long maxFileSize = 5 * 1024 * 1024; // 5MB
+    List<String> allowedMimeTypes = List.of("image/jpeg", "image/png");
      for(MultipartFile menuImage : menuImages) {
-         logger.info("[uploadImage] 메뉴 이미지업로드 진행, menuImage : {}",menuImage.getOriginalFilename());
+         logger.info("[uploadImage] 메뉴 이미지업로드 시작, menuImage : {}",menuImage.getOriginalFilename());
+         logger.info("[uploadImage] 메뉴 이미지 파일 크기 검증 시작, menuImage : {}",menuImage.getOriginalFilename());
+         if (menuImage.getSize() > maxFileSize) {
+             throw new GeneralException(ErrorCode.MAXIMUM_SIZE_FAIL);
+         }
+         logger.info("[uploadImage] 메뉴 이미지 파일 유형 검증 시작, menuImage : {}",menuImage.getOriginalFilename());
+         String contentType = menuImage.getContentType();
+         if (contentType == null || !allowedMimeTypes.contains(contentType)) {
+             throw new GeneralException(ErrorCode.INVALID_UPLOAD_TYPE);
+         }
          String menuName = placeService.uploadMenuImage(menuImage);
          if(menuName == ""|| menuName == null){
              throw new GeneralException(ErrorCode.UPLOAD_FAIL);
          }
+         logger.info("[uploadImage] 메뉴 이미지업로드 완료, menuImage : {}",menuImage.getOriginalFilename());
      }
-    logger.info("[uploadImage] 메뉴 이미지업로드 완료");
     for(MultipartFile placeImage : placeImages) {
-        logger.info("[uploadImage] 매장 이미지업로드 진행, placeImage : {}",placeImage.getOriginalFilename());
+        logger.info("[uploadImage] 매장 이미지업로드 시작, placeImage : {}",placeImage.getOriginalFilename());
+        logger.info("[uploadImage] 매장 이미지파일 크기 검증 시작, placeImage : {}",placeImage.getOriginalFilename());
+        if (placeImage.getSize() > maxFileSize) {
+            throw new GeneralException(ErrorCode.MAXIMUM_SIZE_FAIL);
+        }
+
+        logger.info("[uploadImage] 매장 이미지파일 유형 검증 시작, placeImage : {}",placeImage.getOriginalFilename());
+        String contentType = placeImage.getContentType();
+        if (contentType == null || !allowedMimeTypes.contains(contentType)) {
+            throw new GeneralException(ErrorCode.INVALID_UPLOAD_TYPE);
+        }
+
         String placeName = placeService.uploadPlaceImage(placeImage);
         if(placeName == ""|| placeName == null){
             throw new GeneralException(ErrorCode.UPLOAD_FAIL);
         }
+        logger.info("[uploadImage] 매장 이미지업로드 완료, placeImage : {}",placeImage.getOriginalFilename());
     }
-    logger.info("[uploadImage] 매장 이미지업로드 완료");
     return ApiResponse.success(menuImages.size()+placeImages.size());
 }
 

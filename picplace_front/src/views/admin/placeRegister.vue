@@ -87,6 +87,8 @@
                 v-model:file-list="rawPlacePhotos"
                 id="placeImages"
                 list-type="picture-card"
+                :before-upload="handleBeforeUpload"
+                :on-remove="handleRemove"
                 :on-preview="uploadPlaceImage"
                 :auto-upload="false"
             >
@@ -204,6 +206,18 @@ export  default {
             placeImageUrl.value = uploadFile.url
             dialogVisible.value = true
         }
+      const handleBeforeUpload = (file) => {
+        formData.append('placeImages', file.raw || file);
+        return false;
+      };
+
+      const handleRemove = (file) => {
+        // 선택된 파일 목록에서 삭제된 파일을 formData에서도 삭제
+        const index = formData.getAll('placeImages').indexOf(file.raw || file);
+        if (index !== -1) {
+          formData.delete('placeImages');
+        }
+      };
 
         const onSubmit = async () => {
             if(placeform.value.placeType ==='CAFE'){
@@ -229,13 +243,14 @@ export  default {
             }
             //매장사진 파일 추가
             rawPlacePhotos.value.forEach((file,index) => {
-                const fileObject = new File([file.raw], file.name,{type:file.type})
+              const fileObject = file.raw || file;
+              //const fileObject = new File([file.raw], file.name,{type:file.type})
                 formData.append('placeImages',fileObject);
                 placeform.value.placePhotos[index] = file.name;
             })
-            //업로드 파일 확인
+            // //업로드 파일 확인
             // for(let file of formData.values()){
-            //     console.log(file);
+            //     console.log("파일 : ",file);
             // }
             try{
                 const res = await axios.post('api/place/uploadImage',formData,{
@@ -243,6 +258,7 @@ export  default {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
+                console.log(res)
                 if(res.data.code == 200){
                     console.log("업로드 메뉴갯수 : {}",res.data);
                     const res2 = await axios.post('api/place/addplace',placeform.value);
@@ -273,6 +289,8 @@ export  default {
             uploadPlaceImage,
             rawPlacePhotos,
             dialogVisible,
+          handleBeforeUpload,
+          handleRemove,
 
 
         }
