@@ -56,20 +56,16 @@
 
 
 
-### Built With
+### 🔧 Built With
 
-사용된 frameworks,Tools 및 libraries 입니다. 
+| Category       | Stack                                                                 |
+|----------------|-----------------------------------------------------------------------|
+| **Languages**  | Java 11, JavaScript, HTML/CSS                                         |
+| **Frontend**   | Vue3, Element-Plus, Bootstrap                                         |
+| **Backend**    | Spring Boot, JPA (QueryDSL), JWT, Spring Security, Quartz Batch      |
+| **Server**     | AWS, Linux/UNIX, Ubuntu 20.04, Nginx                                  |
+| **Tool/DevOps**| Docker, Jenkins, FileZilla, IntelliJ, MySQL Workbench, GitHub        |
 
-* ![SpringBoot][SpringBoot]
-* ![JAVA][JAVA]
-* ![JPA][JPA]
-* ![Vue3][Vue3]
-* ![JavaScript][JavaScript]
-* ![Quartz][Quartz]
-* ![Jenkins][Jenkins]
-* ![Docker][Docker]
-* ![AWS][AWS]
-* ![ElementPlus][ElementPlus]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -180,6 +176,17 @@
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## 💡 알게된 점
+
+- [JPA 사용 시 QueryDSL을 활용하면 다중 검색 기능을 훨씬 쉽게 구현할 수 있다.](https://www.notion.so/56a072cf4f2d421ebb183091c096b78a?pvs=21)
+- REST API의 응답값은 엔티티를 그대로 노출하기보단 별도의 DTO를 사용하는 것이 안정성과 확장성 측면에서 유리하다.
+- JPA에서 컬렉션이 포함된 엔티티 조회 시 Fetch Join을 활용하면 N+1 문제 없이 한번의 쿼리로 데이터를 조회할 수 있다.
+- 준영속 상태의 엔티티를 갱신할 땐 `merge()`보다는 **변경 감지(Dirty Checking)** 를 사용하는 것이 예기치 않은 데이터 손실을 방지할 수 있다.
+- [직접 Dockerfile을 작성하고 이미지를 빌드하여 리눅스 서버에 배포하는 과정을 경험할 수 있었다.](https://www.notion.so/564331da6e154b6bb0bc8525b70bc738?pvs=21)
+- [Spring Security와 JWT를 결합한 인증 과정의 로직 흐름을 이해할 수 있었다.](https://www.notion.so/Spring-Security-JWT-62baec985e8543d39e0d7ef131ddca46?pvs=21)
+- [Vue에서 Nginx 배포 시 발생하는 경로 404 오류의 원인을 파악하고, try_files 설정을 통해 해결할 수 있었다.](https://www.notion.so/nginx-vue-404-80d64ec5ab4245afb7f0a1a70e726ca0?pvs=21)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [Vue3]: https://img.shields.io/badge/Vue3-20B2AA?style=for-the-badge
